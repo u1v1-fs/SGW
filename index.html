@@ -1,0 +1,1531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>U1V1 | Scaling & Growth Workspace</title>
+<style>
+:root{color-scheme:light;--ink:#173326;--muted:#5c7465;--line:#d7e7db;--paper:#fff;--bg:#f1f8f2;--green:#15803d;--deep:#123a2a;--teal:#0f766e;--red:#b91c1c;--amber:#a16207;--shadow:0 10px 30px #14532d0d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:linear-gradient(120deg,#123a2a,#166534 60%,#0f766e);color:#fff;padding:22px max(18px,calc((100vw - 1180px)/2))}
+header h1{font-size:clamp(23px,3vw,34px);line-height:1.15;margin:4px 0}
+header p{margin:0;color:#e3f2e7}
+.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;opacity:.85}
+.wrap{max-width:1180px;margin:20px auto;padding:0 16px}
+.topbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.spacer{flex:1}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:start}
+.sidebar,.panel,.card,.metric{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.sidebar{position:sticky;top:12px;padding:9px}
+.nav{display:block;width:100%;border:0;border-radius:9px;background:transparent;color:#405c4c;text-align:left;padding:10px;font:inherit;font-weight:650;cursor:pointer}
+.nav.active{background:#dcfce7;color:#166534}
+.content{min-width:0}
+.page{display:none}
+.page.active{display:block}
+.panel{padding:20px;margin-bottom:14px}
+.panel h2{margin:0 0 3px;font-size:21px}
+.sub,.muted,.small{color:var(--muted)}
+.sub{margin:0 0 17px;font-size:13px}
+.small{font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 15px}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.field{min-width:0}
+.full{grid-column:1/-1}
+label{display:block;font-weight:650;font-size:13px;margin-bottom:5px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);border:1px solid #cbd5d1;border-radius:9px;background:#fff;padding:9px 11px}
+input[type="checkbox"],input[type="range"]{width:auto;padding:0}
+input[type="range"]{width:100%;accent-color:var(--green)}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid #16a34a55;border-color:#16a34a}
+.hint{font-size:11px;color:var(--muted);font-weight:400}
+.btn{border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);padding:9px 12px;font:inherit;font-weight:650;cursor:pointer}
+.btn:hover{filter:brightness(.97)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn.smallbtn{padding:5px 9px;font-size:12px}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn.dark{background:var(--deep);border-color:var(--deep);color:#fff}
+.btn.active-filter{background:#dcfce7;border-color:#16a34a;color:#166534}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:13px}
+.metric{padding:13px}
+.metric .k{font-size:12px;color:var(--muted)}
+.metric .v{font-size:23px;font-weight:800;margin-top:3px}
+.metric .note{font-size:11px;color:var(--muted)}
+.card{padding:15px;margin-bottom:11px}
+.card h3{margin:0 0 7px;font-size:16px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.bar{height:9px;border-radius:10px;background:#e7efe8;overflow:hidden;margin:8px 0}
+.bar>div{height:100%;background:linear-gradient(90deg,#16a34a,#0f766e)}
+.tag{display:inline-block;border-radius:99px;background:#dcfce7;color:#166534;padding:3px 8px;font-size:11px;font-weight:750}
+.tag.amber{background:#fef3c7;color:#92400e}
+.tag.red{background:#fee2e2;color:#991b1b}
+.tag.gray{background:#e2e8f0;color:#334155}
+.alert{padding:12px;border-left:4px solid var(--amber);background:#fffbeb;border-radius:0 8px 8px 0;margin:10px 0}
+.alert.red{border-color:var(--red);background:#fef2f2}
+.alert.green{border-color:var(--green);background:#f0fdf4}
+.task{display:grid;grid-template-columns:minmax(0,1fr) 150px 100px auto;gap:9px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#f8fcf8}
+.task.done{opacity:.65}
+.task.done .task-name b{text-decoration:line-through}
+.task.overdue{border-color:#fca5a5;background:#fef2f2}
+.status{font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f7fbf7}
+.tablewrap{overflow:auto}
+.gate{position:fixed;z-index:20;inset:0;background:#123a2aee;display:grid;place-items:center;padding:20px}
+.gate.topgate{z-index:30}
+.gatebox{width:min(480px,100%);background:#fff;border-radius:16px;padding:24px;box-shadow:0 20px 70px #0004}
+.gatebox h2{margin-top:0}
+.gatebox .alert{font-size:13px}
+.device-box{display:flex;align-items:center;gap:8px;background:#f0fdf4;border:1px solid #86c99b;border-radius:10px;padding:10px 12px;margin:10px 0}
+.device-code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;font-weight:800;letter-spacing:.05em;color:#123a2a;flex:1;word-break:break-all}
+.hidden{display:none!important}
+.statusline{font-size:12px;color:var(--muted)}
+.footer{padding:20px;text-align:center;font-size:12px;color:var(--muted)}
+.print-only{display:none}
+.healthbox{padding:15px 17px;border-radius:12px;border:1px solid var(--line);background:#f8fcf8;margin:0 0 14px}
+.healthbox h3{margin:0 0 4px}
+.healthbox p{margin:5px 0}
+.healthbox.green{border-color:#86c99b;background:#f0fdf4}
+.healthbox.amber{border-color:#f0c46b;background:#fffbeb}
+.healthbox.red{border-color:#f2a5a5;background:#fef2f2}
+.healthbox.gray{border-color:#cbd5e1;background:#f8fafc}
+.chart{width:100%;height:auto;display:block}
+.coach-log{min-height:120px;max-height:300px;overflow:auto;padding:10px;border:1px solid var(--line);border-radius:9px;background:#f8fcf8;margin:10px 0}
+.coach-message{padding:8px 10px;border-radius:9px;background:#fff;margin:7px 0;white-space:pre-wrap}
+.coach-message.user{background:#dcfce7;margin-left:10%}
+.coach-message.assistant{margin-right:8%}
+.coach-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.phase-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.phase-card{border:1px solid var(--line);border-radius:10px;padding:12px;background:#f8fcf8}
+.phase-card h4{margin:0 0 7px}
+.phase-card ul{margin:5px 0 0;padding-left:18px}
+.phase-card li{margin:6px 0;font-size:13px}
+.chat-suggestions,.toolbar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;align-items:center}
+.chart-legend{font-size:11px;color:var(--muted)}
+.dim-pair{display:grid;grid-template-columns:1fr 145px;gap:6px;margin-top:4px}
+.unit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:8px}
+.unit-box{border:1px solid var(--line);border-radius:10px;padding:10px;background:#f8fcf8}
+.unit-box .k{font-size:11px;color:var(--muted)}
+.unit-box .v{font-size:18px;font-weight:800;margin:2px 0}
+.gate-item{display:flex;gap:10px;align-items:flex-start;padding:8px;border:1px solid var(--line);border-radius:9px;margin:6px 0;background:#f8fcf8}
+.gate-item label{margin:0;font-weight:600;cursor:pointer}
+.exp-card{border:1px solid var(--line);border-radius:10px;padding:12px;margin:8px 0;background:#f8fcf8}
+.section-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+@media(max-width:920px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}.unit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{position:static;display:flex;overflow:auto;gap:3px}.nav{white-space:nowrap;width:auto;flex-shrink:0}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three,.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.wrap{padding:0 10px;margin-top:10px}.panel{padding:14px}.grid,.grid.three,.grid.four,.two,.unit-grid,.dim-pair{grid-template-columns:1fr}.full{grid-column:auto}.task{grid-template-columns:1fr 1fr}.task .task-name{grid-column:1/-1}.task button{justify-self:end}}
+@media(max-width:760px){.phase-grid{grid-template-columns:1fr}}
+@media print{body{background:#fff}header{background:#fff;color:#111;padding:12px 0;border-bottom:2px solid #333}header p{color:#333}.wrap{max-width:none;margin:0;padding:0}.topbar,.sidebar,.no-print,.gate{display:none!important}.layout{display:block}.page{display:none!important}#report.page{display:block!important}.panel,.card,.metric{box-shadow:none;break-inside:avoid}.print-only{display:block}.cards{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">U1V1 • Scale with evidence</div>
+  <h1>Scaling & Growth Workspace</h1>
+  <p>A practical, consultant-led tool to test whether growth is repeatable, profitable, deliverable and resilient.</p>
+</header>
+
+<div class="gate topgate" id="licenseGate">
+  <div class="gatebox">
+    <div class="eyebrow" style="color:#166534">Device activation required</div>
+    <h2 id="licenseTitle">Activate U1V1 Workspace</h2>
+    <p id="licenseIntro" class="small">Send your Device ID to your administrator to receive a signed activation key with an expiry date.</p>
+    <label>Your Device ID</label>
+    <div class="device-box">
+      <span class="device-code" id="deviceIdText">Generating…</span>
+      <button class="btn smallbtn" type="button" id="copyDeviceBtn">Copy ID</button>
+    </div>
+    <div id="licenseFormWrap">
+      <label for="activationInput">Activation key</label>
+      <textarea id="activationInput" rows="3" placeholder="Paste activation key (starts with U1V1.…)" style="min-height:70px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
+      <div class="section-actions" style="margin-top:12px">
+        <button class="btn primary" id="activateBtn" style="flex:1">Activate workspace</button>
+        <button class="btn hidden" id="cancelRenewBtn">Cancel</button>
+      </div>
+    </div>
+    <p id="licenseStatus" class="statusline" role="status" aria-live="polite" style="margin-top:10px"></p>
+    <div class="alert" style="margin-bottom:0">Keys are verified locally using an embedded ECDSA P-256 public key and bound to this browser profile's Device ID and expiry date.</div>
+  </div>
+</div>
+
+<div class="gate hidden" id="vaultGate">
+  <div class="gatebox">
+    <div class="eyebrow" style="color:#166534">Private local workspace</div>
+    <h2 id="gateTitle">Create your encrypted vault</h2>
+    <p id="gateIntro">Assessment details are encrypted before being saved in this browser. Choose a strong passphrase and keep a separate, secure backup.</p>
+    <label for="vaultPass">Vault passphrase</label>
+    <input id="vaultPass" type="password" autocomplete="current-password" minlength="12" placeholder="Use at least 12 characters">
+    <div id="confirmWrap" class="hidden" style="margin-top:10px">
+      <label for="vaultConfirm">Confirm passphrase</label>
+      <input id="vaultConfirm" type="password" autocomplete="new-password">
+    </div>
+    <button class="btn primary" id="vaultButton" style="width:100%;margin-top:14px">Create encrypted vault</button>
+    <p id="gateStatus" class="statusline" role="status" aria-live="polite"></p>
+    <div class="alert">This standalone file cannot provide server-backed accounts, tamper-proof licensing, or cloud sync. Encryption protects saved data at rest on this browser, but does not protect an unlocked device or guarantee recovery if you lose the passphrase.</div>
+  </div>
+</div>
+
+<div class="gate topgate hidden" id="importGate">
+  <div class="gatebox">
+    <div class="eyebrow" style="color:#166534">Restore encrypted backup</div>
+    <h2>Enter backup passphrase</h2>
+    <p class="small">Importing will replace the current browser vault after decryption succeeds.</p>
+    <label for="importPass">Backup passphrase</label>
+    <input id="importPass" type="password" autocomplete="off" placeholder="Passphrase used for this backup">
+    <div class="section-actions" style="margin-top:14px">
+      <button class="btn primary" id="importConfirmBtn" style="flex:1">Decrypt & replace vault</button>
+      <button class="btn" id="importCancelBtn">Cancel</button>
+    </div>
+    <p id="importStatus" class="statusline" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="topbar no-print">
+    <button class="btn primary" id="analyzeTop">Update growth analysis</button>
+    <button class="btn" id="snapshotTop">Save dated snapshot</button>
+    <button class="btn" id="backupBtn">Export encrypted backup</button>
+    <button class="btn" id="importBtn">Import encrypted backup</button>
+    <input id="backupFile" type="file" accept="application/json,.json" class="hidden">
+    <button class="btn" id="printBtn">Print / Save report PDF</button>
+    <span class="spacer"></span>
+    <span id="licenseBadge" class="tag gray">Unlicensed</span>
+    <span id="saveStatus" class="statusline" aria-live="polite">Locked</span>
+    <button class="btn" id="lockBtn">Lock</button>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar no-print" id="sidebar">
+      <button class="nav active" data-page="dashboard">Growth dashboard</button>
+      <button class="nav" data-page="assessment">Scale-readiness assessment</button>
+      <button class="nav" data-page="levers">Growth model & levers</button>
+      <button class="nav" data-page="roadmap">Execution roadmap</button>
+      <button class="nav" data-page="report">Assessment report</button>
+      <button class="nav" data-page="privacy">License & privacy</button>
+    </aside>
+
+    <main class="content">
+      <section class="page active" id="dashboard">
+        <div class="panel">
+          <h2>Growth dashboard</h2>
+          <p class="sub">A quick view of scale readiness, evidence verification, unit-economics consistency, and the next decision.</p>
+          <div class="healthbox gray" id="healthStatus" role="status" aria-live="polite">
+            <h3>Business health: Awaiting assessment</h3>
+            <p>Enter current operating metrics and rate the scale-readiness components to see a status based on the information provided.</p>
+          </div>
+          <div class="cards">
+            <div class="metric"><div class="k">Readiness score</div><div class="v" id="dashScore">—</div><div class="note">Out of 100; rated items only</div></div>
+            <div class="metric"><div class="k">Coverage</div><div class="v" id="dashCoverage">0%</div><div class="note">Dimensions answered</div></div>
+            <div class="metric"><div class="k">Evidence verified</div><div class="v" id="dashVerified">0%</div><div class="note">Rated items backed by records</div></div>
+            <div class="metric"><div class="k">Annual revenue</div><div class="v" id="dashRevenue">—</div><div class="note">As entered baseline</div></div>
+            <div class="metric"><div class="k">Open actions</div><div class="v" id="dashActions">0</div><div class="note">Tracked in this vault</div></div>
+          </div>
+
+          <div class="card">
+            <h3>Unit economics & capacity sanity checks</h3>
+            <p class="small">Cross-checked automatically from your baseline and growth-lever figures to surface hidden math contradictions before scaling.</p>
+            <div id="unitChecksBox"><p class="muted">Enter revenue, margin, CAC, ARPC, leads, conversion, or capacity to calculate automated cross-checks.</p></div>
+          </div>
+
+          <div class="two">
+            <div class="card"><h3>Readiness by component</h3><div id="scoreChart" class="small">Complete the assessment and select “Update growth analysis”.</div></div>
+            <div class="card"><h3>Readiness radar</h3><div id="radarChart" class="small">Rate at least one component to build the chart.</div><p class="chart-legend">Unassessed components are omitted.</p></div>
+          </div>
+
+          <div class="two">
+            <div class="card"><h3>Revenue growth comparison</h3><div id="revenueChart" class="small">Enter annual revenue and last-12-month growth to compare the implied prior-year baseline.</div><p class="chart-legend">Derived comparison only; not a forecast.</p></div>
+            <div class="card"><h3>Decision guidance</h3><div id="decisionBox" class="muted">Your analysis will appear here after you enter evidence.</div></div>
+          </div>
+
+          <div class="card">
+            <div class="toolbar" style="justify-content:space-between;margin-top:0">
+              <h3 style="margin:0">Progress snapshots over time</h3>
+              <button class="btn smallbtn" id="snapshotBtn2">+ Save dated snapshot</button>
+            </div>
+            <p class="small">Freeze periodic check-ins inside your encrypted vault to compare readiness scores, verification quality, and operating metrics across quarters.</p>
+            <div id="historyList"><p class="muted">No snapshots saved yet.</p></div>
+          </div>
+
+          <div class="card">
+            <h3>Interactive Growth Coach</h3>
+            <p class="small">Ask about priorities, cash, unit economics, LTV:CAC, capacity, experiments, or your next roadmap step. Private offline rule-based coach; sends no data anywhere.</p>
+            <div class="chat-suggestions">
+              <button class="btn smallbtn coach-prompt" data-question="What should I focus on first?">What first?</button>
+              <button class="btn smallbtn coach-prompt" data-question="What are my biggest risks to scaling?">Scaling risks</button>
+              <button class="btn smallbtn coach-prompt" data-question="Check my unit economics and LTV:CAC">Unit economics</button>
+              <button class="btn smallbtn coach-prompt" data-question="How much capacity headroom do I have?">Capacity headroom</button>
+              <button class="btn smallbtn coach-prompt" data-question="What should my next 90 days look like?">Next 90 days</button>
+            </div>
+            <div class="coach-log" id="coachLog" role="log" aria-live="polite">
+              <div class="coach-message assistant">I can interpret your readiness ratings, evidence confidence, unit-economics math, and stress-test signals. Try a suggested prompt or ask a question.</div>
+            </div>
+            <form class="coach-form" id="coachForm">
+              <input id="coachInput" aria-label="Ask the Growth Coach" placeholder="Ask a growth question…" autocomplete="off">
+              <button class="btn primary" type="submit">Ask</button>
+            </form>
+          </div>
+          <div class="section-actions"><button class="btn primary" data-go="assessment">Start scale-readiness review →</button></div>
+        </div>
+      </section>
+
+      <section class="page" id="assessment">
+        <div class="panel">
+          <h2>1. Business baseline</h2>
+          <p class="sub">Use actual, dated figures when possible. Leave unknown values blank rather than guessing.</p>
+          <div class="grid">
+            <div class="field"><label for="f-businessName">Business name</label><input id="f-businessName" name="businessName" placeholder="Trading or registered name"></div>
+            <div class="field"><label for="f-industry">Industry / market</label><input id="f-industry" name="industry" placeholder="What market do you serve?"></div>
+            <div class="field"><label for="f-businessModel">Business model</label>
+              <select id="f-businessModel" name="businessModel">
+                <option value="">Select</option>
+                <option>B2B Services / Agency</option>
+                <option>SaaS / Subscription</option>
+                <option>E-commerce / D2C</option>
+                <option>Manufacturing / Distribution</option>
+                <option>Retail / Multi-site</option>
+                <option>Marketplace / Platform</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field"><label for="f-stage">Business stage</label>
+              <select id="f-stage" name="stage">
+                <option value="">Select</option>
+                <option>Pre-launch</option>
+                <option>Early traction</option>
+                <option>Established</option>
+                <option>Scaling</option>
+                <option>Turnaround</option>
+              </select>
+            </div>
+            <div class="field"><label for="f-assessmentDate">Assessment date</label><input id="f-assessmentDate" name="assessmentDate" type="date"></div>
+            <div class="field"><label for="f-currency">Currency</label><input id="f-currency" name="currency" maxlength="8" value="INR" placeholder="INR, USD, etc."></div>
+            <div class="field"><label for="f-annualRevenue">Annual revenue <span class="hint">most recent 12 months</span></label><input id="f-annualRevenue" name="annualRevenue" type="number" min="0" step="0.01"></div>
+            <div class="field"><label for="f-revenueGrowth">Revenue growth, last 12 months (%)</label><input id="f-revenueGrowth" name="revenueGrowth" type="number" step="0.1"></div>
+            <div class="field"><label for="f-grossMargin">Gross margin (%)</label><input id="f-grossMargin" name="grossMargin" type="number" min="-100" max="100" step="0.1"></div>
+            <div class="field"><label for="f-netMargin">Net margin (%)</label><input id="f-netMargin" name="netMargin" type="number" min="-100" max="100" step="0.1"></div>
+            <div class="field"><label for="f-activeCustomers">Active customers</label><input id="f-activeCustomers" name="activeCustomers" type="number" min="0" step="1"></div>
+            <div class="field"><label for="f-repeatRate">Repeat-customer rate (%)</label><input id="f-repeatRate" name="repeatRate" type="number" min="0" max="100" step="0.1"></div>
+            <div class="field"><label for="f-customerLifespan">Avg. customer lifespan (months) <span class="hint">for LTV check</span></label><input id="f-customerLifespan" name="customerLifespan" type="number" min="0" step="0.5" placeholder="e.g. 24"></div>
+            <div class="field"><label for="f-topCustomerShare">Top 3 customers revenue share (%) <span class="hint">concentration risk</span></label><input id="f-topCustomerShare" name="topCustomerShare" type="number" min="0" max="100" step="0.1" placeholder="e.g. 35"></div>
+            <div class="field"><label for="f-capacity">Capacity utilisation (%) <span class="hint">output / practical max</span></label><input id="f-capacity" name="capacity" type="number" min="0" max="200" step="0.1"></div>
+            <div class="field"><label for="f-qualifiedLeads">Monthly qualified leads</label><input id="f-qualifiedLeads" name="qualifiedLeads" type="number" min="0" step="1"></div>
+            <div class="field"><label for="f-conversion">Lead-to-sale conversion (%)</label><input id="f-conversion" name="conversion" type="number" min="0" max="100" step="0.1"></div>
+            <div class="field"><label for="f-cac">Customer acquisition cost (CAC)</label><input id="f-cac" name="cac" type="number" min="0" step="0.01"></div>
+            <div class="field"><label for="f-monthlyARPC">Avg. monthly revenue per customer (ARPC)</label><input id="f-monthlyARPC" name="monthlyARPC" type="number" min="0" step="0.01"></div>
+            <div class="field"><label for="f-dataSource">Baseline source and period <span class="hint">bookkeeping, CRM, owner estimate</span></label><input id="f-dataSource" name="dataSource" placeholder="Record sources & period; never enter credentials"></div>
+            <div class="field full"><label for="f-growthObjective">Growth objective and target date</label><textarea id="f-growthObjective" name="growthObjective" placeholder="What specific growth outcome is desired, by when, and why?"></textarea></div>
+          </div>
+
+          <div class="card" style="margin-top:16px">
+            <h3>Scale-readiness dimensions & evidence basis</h3>
+            <p class="small">Rate each component from 1 (fragile) to 5 (repeatable) and mark whether the rating is an estimate or verified from operating records.</p>
+            <div class="grid" id="dimensions"></div>
+          </div>
+
+          <div class="field full" style="margin-top:13px"><label for="f-constraints">Critical constraints, risks, and non-negotiables</label><textarea id="f-constraints" name="constraints" placeholder="Cash, regulation, supplier dependency, founder capacity, quality, values, or other limits"></textarea></div>
+          <div class="field full" style="margin-top:13px"><label for="f-evidence">Evidence reviewed and confidence notes</label><textarea id="f-evidence" name="evidence" placeholder="Records, interviews, operating data, or estimates used; note gaps and assumptions"></textarea></div>
+          <div class="section-actions">
+            <button class="btn primary" id="analyzeAssessment">Update growth analysis</button>
+            <button class="btn" data-go="levers">Next: Growth model & levers →</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="levers">
+        <div class="panel">
+          <h2>2. Growth model, economics & stress-test</h2>
+          <p class="sub">Make the growth hypothesis explicit, stress-test cash & capacity under scaling friction, and log structured experiments.</p>
+          <div class="grid">
+            <div class="field"><label for="f-growthRoute">Primary growth route</label>
+              <select id="f-growthRoute" name="growthRoute">
+                <option value="">Select</option>
+                <option>Sell more to current customers</option>
+                <option>Acquire new customer segments</option>
+                <option>Expand geography</option>
+                <option>Launch / improve products</option>
+                <option>Raise prices or improve mix</option>
+                <option>Partnerships / channels</option>
+                <option>Franchise / license</option>
+                <option>Digital / self-service</option>
+                <option>Other / not decided</option>
+              </select>
+            </div>
+            <div class="field"><label for="f-hypothesisConfidence">Growth assumption confidence</label>
+              <select id="f-hypothesisConfidence" name="hypothesisConfidence">
+                <option value="">Select</option>
+                <option>Low — untested</option>
+                <option>Medium — early evidence</option>
+                <option>High — repeated evidence</option>
+              </select>
+            </div>
+            <div class="field"><label for="f-growthChannel">Primary growth channel</label><input id="f-growthChannel" name="growthChannel" placeholder="e.g. direct sales, distributors, online"></div>
+            <div class="field"><label for="f-targetSegment">Target customer segment</label><input id="f-targetSegment" name="targetSegment" placeholder="Who is the next best-fit customer?"></div>
+            <div class="field"><label for="f-contributionMargin">Expected contribution margin (%)</label><input id="f-contributionMargin" name="contributionMargin" type="number" min="-100" max="100" step="0.1"></div>
+            <div class="field"><label for="f-paybackMonths">Estimated payback period (months)</label><input id="f-paybackMonths" name="paybackMonths" type="number" min="0" step="0.1"></div>
+            <div class="field"><label for="f-breakEven">Current monthly break-even revenue</label><input id="f-breakEven" name="breakEven" type="number" min="0" step="0.01"></div>
+            <div class="field"><label for="f-runway">Working capital / cash runway (months)</label><input id="f-runway" name="runway" type="number" min="0" step="0.1"></div>
+            <div class="field full"><label for="f-salesPlaybook">Repeatable sales playbook</label><textarea id="f-salesPlaybook" name="salesPlaybook" placeholder="Lead source → qualification → offer → close → onboarding; what is documented and measurable?"></textarea></div>
+            <div class="field full"><label for="f-bottleneck">Delivery capacity and bottleneck</label><textarea id="f-bottleneck" name="bottleneck" placeholder="What limits the next 20–50% increase in volume? People, systems, supplier, quality, working capital?"></textarea></div>
+            <div class="field full"><label for="f-riskPlan">Risks and mitigations before scaling</label><textarea id="f-riskPlan" name="riskPlan" placeholder="Name each material risk, early warning signal, owner, and mitigation"></textarea></div>
+          </div>
+
+          <div class="card" style="margin-top:16px">
+            <h3>Scale Stress-Test & Working Capital Simulator</h3>
+            <p class="small">Test how realistic scaling friction—higher CAC, compressed margin, and step-up fixed costs—affects capacity, break-even, and upfront cash requirements.</p>
+            <div class="grid four">
+              <div class="field">
+                <label for="f-simGrowth">Target 12m growth: <span id="simGrowthVal">30</span>%</label>
+                <input id="f-simGrowth" name="simGrowth" type="range" min="5" max="150" step="5" value="30">
+              </div>
+              <div class="field">
+                <label for="f-simCacInfl">CAC inflation: +<span id="simCacVal">15</span>%</label>
+                <input id="f-simCacInfl" name="simCacInfl" type="range" min="0" max="60" step="5" value="15">
+              </div>
+              <div class="field">
+                <label for="f-simMarginDrop">Margin drop: -<span id="simMarginVal">3</span> pts</label>
+                <input id="f-simMarginDrop" name="simMarginDrop" type="range" min="0" max="20" step="1" value="3">
+              </div>
+              <div class="field">
+                <label for="f-simStepCost">Added monthly fixed cost</label>
+                <input id="f-simStepCost" name="simStepCost" type="number" min="0" step="100" value="0" placeholder="Hires / ops step-up">
+              </div>
+            </div>
+            <div id="simOutput" style="margin-top:12px"><p class="muted">Enter baseline revenue, margin, and CAC to run the stress test.</p></div>
+          </div>
+
+          <div class="card">
+            <h3>Structured Scaling Experiment Ledger</h3>
+            <p class="small">Replace vague growth ideas with time-boxed, budget-capped tests and explicit kill/stop rules.</p>
+            <div class="grid three">
+              <div class="field full"><label for="expHyp">Hypothesis</label><input id="expHyp" placeholder="If we [action] for [segment], then [metric] will reach [target]"></div>
+              <div class="field"><label for="expChannel">Channel / segment</label><input id="expChannel" placeholder="e.g. LinkedIn outbound, dealers"></div>
+              <div class="field"><label for="expCap">Budget & timebox cap</label><input id="expCap" placeholder="e.g. ₹50,000 over 30 days"></div>
+              <div class="field"><label for="expMetric">Success metric & target</label><input id="expMetric" placeholder="e.g. 12 qualified demos, CAC < ₹4,000"></div>
+              <div class="field full"><label for="expStop">Stop / kill rule</label><input id="expStop" placeholder="e.g. Pause if conversion < 5% after 40 qualified leads"></div>
+            </div>
+            <button class="btn primary" id="addExperimentBtn" style="margin-top:10px">Add experiment to ledger</button>
+            <div id="experimentList" style="margin-top:12px"><p class="muted">No scaling experiments logged yet.</p></div>
+          </div>
+
+          <div class="section-actions">
+            <button class="btn" data-go="assessment">← Assessment</button>
+            <button class="btn primary" data-go="roadmap">Next: Execution roadmap →</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="roadmap">
+        <div class="panel">
+          <h2>3. Execution roadmap & pre-scale gate</h2>
+          <p class="sub">Convert recommendations into owned actions with dates, priorities, proof of completion, and a formal Go/No-Go gate.</p>
+
+          <div class="card">
+            <h3>Suggested phased roadmap</h3>
+            <p class="small">Automatically sequenced from low-rated readiness areas and operating signals. Add named owners and validate timelines before treating this as a commitment.</p>
+            <div id="phaseRoadmap"><p class="muted">Update the growth analysis to generate your phased plan.</p></div>
+            <button class="btn primary" id="addAllRoadmap" style="margin-top:10px">Add all suggested priorities to tracker</button>
+          </div>
+
+          <div id="recommendedActions" class="card"><p class="muted">Update the growth analysis to create evidence-based recommendations.</p></div>
+
+          <div class="card">
+            <h3>Pre-scale Go / No-Go gate checklist</h3>
+            <p class="small">Verify these conditions before committing significant growth spend or fixed headcount.</p>
+            <div id="gateChecklist"></div>
+          </div>
+
+          <div class="card">
+            <h3>Add a milestone</h3>
+            <div class="grid three">
+              <div><label for="taskName">Action / milestone</label><input id="taskName" placeholder="e.g. Validate channel CAC"></div>
+              <div><label for="taskOwner">Owner</label><input id="taskOwner" placeholder="Accountable person"></div>
+              <div><label for="taskDue">Due date</label><input id="taskDue" type="date"></div>
+              <div><label for="taskPriority">Priority</label>
+                <select id="taskPriority">
+                  <option>P1 — Urgent</option>
+                  <option>P2 — Important</option>
+                  <option>P3 — Planned</option>
+                </select>
+              </div>
+              <div class="field" style="grid-column:span 2"><label for="taskMeasure">Success measure / evidence</label><input id="taskMeasure" placeholder="How will completion be verified?"></div>
+            </div>
+            <button class="btn primary" id="addTask" style="margin-top:10px">Add action</button>
+          </div>
+
+          <div class="card">
+            <div class="toolbar" style="justify-content:space-between;margin-top:0">
+              <h3 style="margin:0">Action tracker</h3>
+              <button class="btn smallbtn" id="exportCsvBtn">Export actions CSV</button>
+            </div>
+            <div class="toolbar" id="taskFilters">
+              <button class="btn smallbtn active-filter" data-filter="all">All</button>
+              <button class="btn smallbtn" data-filter="open">Open</button>
+              <button class="btn smallbtn" data-filter="done">Done</button>
+              <button class="btn smallbtn" data-filter="p1">P1 Urgent</button>
+              <button class="btn smallbtn" data-filter="overdue">Overdue</button>
+            </div>
+            <div id="taskList"><p class="muted">No actions yet.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="report">
+        <div class="panel">
+          <div class="toolbar no-print" style="justify-content:space-between;margin-top:0">
+            <div>
+              <h2 style="margin:0">Scale-readiness report</h2>
+              <p class="sub" style="margin:2px 0 0">A preliminary planning aid—not audited financial, legal, tax, or investment advice.</p>
+            </div>
+            <label style="display:flex;align-items:center;gap:6px;font-weight:600;margin:0;cursor:pointer">
+              <input type="checkbox" id="redactReportToggle"> Redact raw currency figures (brief mode)
+            </label>
+          </div>
+          <div id="reportBody"><p class="muted">Update the growth analysis to generate the report.</p></div>
+          <p class="small print-only">Generated from user-entered information. Validate inputs and assumptions with source records and qualified advisers.</p>
+        </div>
+      </section>
+
+      <section class="page" id="privacy">
+        <div class="panel">
+          <h2>Activation license, data protection & limitations</h2>
+          <p class="sub">Manage your device activation key and understand what this standalone file protects.</p>
+
+          <div class="card">
+            <h3>Device activation & license status</h3>
+            <div id="licenseDetailsBox" class="small">Checking license…</div>
+            <div class="section-actions">
+              <button class="btn" id="openRenewBtn">Enter / renew activation key</button>
+              <button class="btn" id="copyDevicePrivacyBtn">Copy Device ID</button>
+            </div>
+          </div>
+
+          <div class="alert"><b>Saved data is encrypted locally.</b> Your assessment, snapshots, experiments, and roadmap are encrypted in browser storage with AES-GCM and a PBKDF2-derived key (310,000 iterations). Passphrases are never stored and no data leaves this device.</div>
+          <div class="two">
+            <div class="card">
+              <h3>Safeguards included</h3>
+              <ul>
+                <li>ECDSA P-256 asymmetric license verification (client app contains only the public key).</li>
+                <li>No external scripts, fonts, analytics, or network calls.</li>
+                <li>Browser storage and exported JSON backups are AES-GCM encrypted.</li>
+                <li>Scores exclude unassessed dimensions and separately surface Evidence Verified %.</li>
+                <li>CSV action exports neutralize spreadsheet formula characters (`=`, `+`, `-`, `@`).</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Remaining limitations</h3>
+              <ul>
+                <li>No server-side license revocation or tamper-proof DRM in a standalone local HTML file.</li>
+                <li>Expiry checks rely on the local device clock (basic clock-rollback detection is applied).</li>
+                <li>Encryption protects data at rest, not while the vault is unlocked on a compromised device.</li>
+                <li>Losing your vault passphrase means encrypted data cannot be recovered. Keep separate backups.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="footer">U1V1 Scaling & Growth Workspace • Device-activated, local-only encrypted decision support</div>
+</div>
+
+<script>
+(()=>{'use strict';
+const ISSUER_PUBLIC_JWK = /*__U1V1_PUBKEY_START__*/{"crv":"P-256","ext":true,"key_ops":["verify"],"kty":"EC","x":"MclgyCPyBG5PEb-IJlOAdJehnUxqAnfS-9p4ChY3fqE","y":"R69N_Wnt76RmXuUtuKY0lCrOe7IKf7LYjmyM3WNRRCA"}/*__U1V1_PUBKEY_END__*/;
+
+const STORAGE_KEY='u1v1_scaling_vault_v1';
+const DEVICE_KEY='u1v1_device_id_v1';
+const LICENSE_KEY='u1v1_license_v1';
+const LAST_SEEN_KEY='u1v1_last_seen_v1';
+
+const dimensions=[
+  {key:'demand',shortLabel:'Demand',label:'1. Proven demand & customer retention',weight:1.2,help:'Repeat purchase, retention, referrals, and evidence customers want more.'},
+  {key:'unitEconomics',shortLabel:'Unit Econ',label:'2. Profitable unit economics',weight:1.3,help:'Contribution margin, CAC payback, pricing power, and cash impact.'},
+  {key:'salesRepeatability',shortLabel:'Sales',label:'3. Repeatable sales engine',weight:1.2,help:'Predictable lead sources, conversion, pipeline, and a teachable sales playbook.'},
+  {key:'delivery',shortLabel:'Delivery',label:'4. Delivery capacity & quality',weight:1.2,help:'Ability to grow throughput without quality, service, or safety failures.'},
+  {key:'processes',shortLabel:'Processes',label:'5. Documented processes & systems',weight:1.0,help:'Standard operating processes, reliable data, automation, and controls.'},
+  {key:'team',shortLabel:'Team',label:'6. Team, leadership & delegation',weight:1.0,help:'Clear roles, capable managers, succession, and reduced founder dependency.'},
+  {key:'cash',shortLabel:'Cash',label:'7. Cash & funding resilience',weight:1.2,help:'Working capital, forecast visibility, cash runway, and finance options.'},
+  {key:'supply',shortLabel:'Supply',label:'8. Supply chain & partner resilience',weight:0.9,help:'Supplier capacity, alternatives, lead times, and partner reliability.'},
+  {key:'governance',shortLabel:'Governance',label:'9. Compliance, risk & governance',weight:0.9,help:'Obligations, contracts, cyber/data controls, and risk ownership.'},
+  {key:'measurement',shortLabel:'Metrics',label:'10. Growth measurement & learning',weight:0.8,help:'Current baseline, KPI owners, review cadence, and experiment discipline.'}
+];
+const gateCriteria=[
+  {id:'g_unit',text:'Unit economics (contribution margin, CAC, payback) verified on recent customer cohorts.'},
+  {id:'g_cash',text:'Downside cash runway covers worst-case working capital and payback trough (typically ≥ 6 months).'},
+  {id:'g_capacity',text:'Delivery bottleneck has an assigned owner and verified quality control at higher volume.'},
+  {id:'g_conc',text:'Customer/supplier concentration risk reviewed with mitigation or buffer in place.'},
+  {id:'g_playbook',text:'Sales playbook documented and repeatable beyond founder heroics.'},
+  {id:'g_stop',text:'Pre-agreed stop-loss trigger and 30-day review date set before scaling spend.'}
+];
+
+let vaultKey=null,vaultSalt=null;
+let assessment={tasks:[],experiments:[],history:[],gates:{}};
+let saveTimer=null,saving=false,queuedSave=false;
+let taskFilter='all',pendingImportRecord=null,isUnlocked=false;
+let deviceId='',activeLicense=null;
+
+const $=id=>document.getElementById(id);
+const formFields=()=>[...document.querySelectorAll('input[name],select[name],textarea[name]')];
+const setStatus=(text,bad=false)=>{const el=$('saveStatus');el.textContent=text;el.style.color=bad?'#b91c1c':''};
+
+function b64(buf){
+  const bytes=buf instanceof Uint8Array?buf:new Uint8Array(buf);
+  let bin='';
+  const chunk=0x4000;
+  for(let i=0;i<bytes.length;i+=chunk)bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));
+  return btoa(bin);
+}
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+function unb64uBytes(str){
+  let s=str.replace(/-/g,'+').replace(/_/g,'/');
+  while(s.length%4)s+='=';
+  return unb64(s);
+}
+function randomBytes(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return a}
+function newId(){return crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(16).slice(2)}
+function todayYmd(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function initDeviceId(){
+  try{
+    let id=localStorage.getItem(DEVICE_KEY);
+    if(!id||!/^U1V1-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(id)){
+      const r=randomBytes(6);
+      const hex=[...r].map(b=>b.toString(16).padStart(2,'0').toUpperCase()).join('');
+      id=`U1V1-${hex.slice(0,4)}-${hex.slice(4,8)}-${hex.slice(8,12)}`;
+      localStorage.setItem(DEVICE_KEY,id);
+    }
+    deviceId=id;
+  }catch(e){
+    deviceId='STORAGE-UNAVAILABLE';
+  }
+  $('deviceIdText').textContent=deviceId;
+}
+
+function checkClockRollback(){
+  try{
+    const now=Date.now();
+    const prev=Number(localStorage.getItem(LAST_SEEN_KEY)||0);
+    if(prev&&now<prev-86400000)return true;
+    localStorage.setItem(LAST_SEEN_KEY,String(Math.max(now,prev)));
+  }catch(e){}
+  return false;
+}
+
+async function verifyActivationToken(token){
+  if(!ISSUER_PUBLIC_JWK){
+    return {ok:false,reason:'Issuer Public Key is not bound to this HTML file yet. Use U1V1_License_Key_Generator.html to bind your public key first.'};
+  }
+  if(!window.crypto||!window.crypto.subtle){
+    return {ok:false,reason:'Web Crypto API is unavailable in this browser.'};
+  }
+  const clean=(token||'').trim();
+  const parts=clean.split('.');
+  if(parts.length!==3||parts[0]!=='U1V1'){
+    return {ok:false,reason:'Invalid key format. Activation keys must start with U1V1.'};
+  }
+  const [,payloadB64u,sigB64u]=parts;
+  let payload;
+  try{
+    payload=JSON.parse(new TextDecoder().decode(unb64uBytes(payloadB64u)));
+  }catch(e){
+    return {ok:false,reason:'Corrupted activation payload.'};
+  }
+  if(!payload||typeof payload!=='object'||!payload.deviceId||!payload.exp){
+    return {ok:false,reason:'Activation payload is missing required fields.'};
+  }
+  if(String(payload.deviceId).trim().toUpperCase()!==deviceId){
+    return {ok:false,reason:`Device ID mismatch. Key was issued for ${payload.deviceId}, not ${deviceId}.`};
+  }
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(String(payload.exp))){
+    return {ok:false,reason:'Invalid expiry date format in activation key.'};
+  }
+  try{
+    const pubKey=await crypto.subtle.importKey('jwk',ISSUER_PUBLIC_JWK,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
+    const validSig=await crypto.subtle.verify(
+      {name:'ECDSA',hash:'SHA-256'},
+      pubKey,
+      unb64uBytes(sigB64u),
+      new TextEncoder().encode(payloadB64u)
+    );
+    if(!validSig)return {ok:false,reason:'Invalid cryptographic signature. Activation key rejected.'};
+  }catch(e){
+    return {ok:false,reason:'Signature verification failed: '+(e.message||'error')};
+  }
+  if(checkClockRollback()){
+    return {ok:false,reason:'System clock appears set backward compared to previous usage. Restore accurate date/time.'};
+  }
+  if(todayYmd()>payload.exp){
+    return {ok:false,expired:true,exp:payload.exp,reason:`Activation key expired on ${payload.exp}. Request a renewal key for Device ID ${deviceId}.`};
+  }
+  return {ok:true,payload};
+}
+
+function updateLicenseUI(){
+  const badge=$('licenseBadge'),box=$('licenseDetailsBox');
+  if(activeLicense){
+    const daysLeft=Math.ceil((new Date(activeLicense.exp+'T23:59:59')-new Date())/86400000);
+    badge.textContent=`Licensed · exp ${activeLicense.exp}`;
+    badge.className='tag '+(daysLeft<=14?'amber':'');
+    box.innerHTML=`
+      <p><b>Status:</b> <span class="tag ${daysLeft<=14?'amber':''}">Active (${daysLeft} day(s) remaining)</span></p>
+      <p><b>Device ID:</b> <code>${escapeHtml(deviceId)}</code></p>
+      <p><b>Expires on:</b> ${escapeHtml(activeLicense.exp)} · <b>Issued:</b> ${escapeHtml(activeLicense.issued||'—')}</p>
+      ${activeLicense.note?`<p><b>Licensee / Note:</b> ${escapeHtml(activeLicense.note)}</p>`:''}
+    `;
+  }else{
+    badge.textContent='Unlicensed';
+    badge.className='tag red';
+    box.innerHTML=`<p>No active license. Device ID: <code>${escapeHtml(deviceId)}</code></p>`;
+  }
+}
+
+async function initLicenseGate(){
+  initDeviceId();
+  if(!ISSUER_PUBLIC_JWK){
+    $('licenseTitle').textContent='Setup required: Bind Issuer Public Key';
+    $('licenseIntro').textContent='This template needs your Public Key bound into it using U1V1_License_Key_Generator.html before it can accept activation keys.';
+    $('licenseFormWrap').classList.add('hidden');
+    $('licenseStatus').textContent='In U1V1_License_Key_Generator.html: Step 1 (Generate Keypair) → Step 2 (Bind Public Key & Download Client HTML), then open the downloaded file.';
+    $('licenseStatus').style.color='#b91c1c';
+    updateLicenseUI();
+    return;
+  }
+  let storedToken='';
+  try{storedToken=localStorage.getItem(LICENSE_KEY)||'';}catch(e){}
+  if(storedToken){
+    const res=await verifyActivationToken(storedToken);
+    if(res.ok){
+      activeLicense=res.payload;
+      updateLicenseUI();
+      $('licenseGate').classList.add('hidden');
+      if(!isUnlocked)$('vaultGate').classList.remove('hidden');
+      gateInit();
+      return;
+    }
+    $('licenseStatus').textContent=res.reason;
+    $('licenseStatus').style.color='#b91c1c';
+  }
+  activeLicense=null;
+  updateLicenseUI();
+  $('licenseGate').classList.remove('hidden');
+  $('vaultGate').classList.add('hidden');
+}
+
+async function handleActivate(){
+  const token=$('activationInput').value.trim();
+  if(!token){$('licenseStatus').textContent='Paste an activation key first.';return;}
+  const res=await verifyActivationToken(token);
+  if(!res.ok){
+    $('licenseStatus').textContent=res.reason;
+    $('licenseStatus').style.color='#b91c1c';
+    return;
+  }
+  try{localStorage.setItem(LICENSE_KEY,token);}catch(e){}
+  activeLicense=res.payload;
+  $('activationInput').value='';
+  $('licenseStatus').textContent='';
+  $('cancelRenewBtn').classList.add('hidden');
+  $('licenseGate').classList.add('hidden');
+  updateLicenseUI();
+  if(!isUnlocked){
+    $('vaultGate').classList.remove('hidden');
+    gateInit();
+  }
+}
+
+async function deriveKey(pass,salt){
+  const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:310000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+}
+async function encryptRecord(data,key){
+  const iv=randomBytes(12);
+  const plain=new TextEncoder().encode(JSON.stringify(data));
+  const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,plain);
+  return {app:'U1V1 Scaling & Growth Workspace',version:2,salt:b64(vaultSalt),iv:b64(iv),ciphertext:b64(cipher),updatedAt:new Date().toISOString()};
+}
+async function decryptRecord(record,key){
+  const bytes=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(record.iv)},key,unb64(record.ciphertext));
+  const data=JSON.parse(new TextDecoder().decode(bytes));
+  if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Invalid vault data');
+  return data;
+}
+
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function numericValue(name){
+  const el=document.querySelector(`[name="${name}"]`);
+  const value=el?.value?.trim();
+  if(!value)return null;
+  const n=Number(value);
+  return Number.isFinite(n)?n:null;
+}
+function money(v,redact=false){
+  if(redact)return '[Redacted]';
+  const n=Number(v);
+  if(v===''||v===null||v===undefined||!Number.isFinite(n))return '—';
+  const cur=(document.querySelector('[name="currency"]')?.value||'').trim();
+  return `${cur?cur+' ':''}${n.toLocaleString(undefined,{maximumFractionDigits:0})}`;
+}
+function level(score){
+  if(score===null)return 'Not assessed';
+  if(score<40)return 'Stabilise before scaling';
+  if(score<65)return 'Validate the growth engine';
+  if(score<82)return 'Scale selectively';
+  return 'Scale with controls';
+}
+
+function gather(){
+  const data={...assessment};
+  for(const el of formFields()){
+    if(el.type==='checkbox')data[el.name]=el.checked;
+    else data[el.name]=el.value;
+  }
+  data.tasks=Array.isArray(assessment.tasks)?assessment.tasks:[];
+  data.experiments=Array.isArray(assessment.experiments)?assessment.experiments:[];
+  data.history=Array.isArray(assessment.history)?assessment.history:[];
+  data.gates=(assessment.gates&&typeof assessment.gates==='object')?assessment.gates:{};
+  return data;
+}
+function populate(data){
+  assessment={
+    ...data,
+    tasks:Array.isArray(data.tasks)?data.tasks:[],
+    experiments:Array.isArray(data.experiments)?data.experiments:[],
+    history:Array.isArray(data.history)?data.history:[],
+    gates:(data.gates&&typeof data.gates==='object')?data.gates:{}
+  };
+  for(const el of formFields()){
+    const v=data[el.name];
+    if(el.type==='checkbox')el.checked=Boolean(v);
+    else if(v!==undefined&&v!==null)el.value=String(v);
+    else el.value=el.name==='currency'?'INR':(el.type==='range'?el.defaultValue:'');
+  }
+  renderGates();renderTasks();renderExperiments();renderHistory();analyze();
+}
+
+async function writeEncrypted(data){
+  if(!vaultKey)return;
+  const record=await encryptRecord(data,vaultKey);
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(record));
+    setStatus('Saved encrypted locally • '+new Date().toLocaleTimeString());
+  }catch(e){
+    setStatus('Save failed: browser storage unavailable or full. Export a backup.',true);
+    throw e;
+  }
+}
+async function saveNow(){
+  if(!vaultKey)return;
+  if(saving){queuedSave=true;return;}
+  saving=true;
+  try{await writeEncrypted(gather());}
+  catch(e){console.error('Encrypted save failed',e);}
+  finally{saving=false;if(queuedSave){queuedSave=false;saveNow();}}
+}
+function scheduleSave(){
+  if(!vaultKey)return;
+  clearTimeout(saveTimer);
+  setStatus('Saving…');
+  saveTimer=setTimeout(saveNow,450);
+}
+
+function renderDimensions(){
+  const host=$('dimensions');
+  host.innerHTML='';
+  for(const d of dimensions){
+    const box=document.createElement('div');
+    box.className='field';
+    const label=document.createElement('label');
+    label.htmlFor='score-'+d.key;
+    label.textContent=d.label;
+    const hint=document.createElement('div');
+    hint.className='hint';
+    hint.textContent=d.help;
+    const pair=document.createElement('div');
+    pair.className='dim-pair';
+    const select=document.createElement('select');
+    select.name='rating_'+d.key;
+    select.id='score-'+d.key;
+    select.innerHTML='<option value="">Not assessed</option><option value="1">1 — Critical / not demonstrated</option><option value="2">2 — Weak / inconsistent</option><option value="3">3 — Partly established</option><option value="4">4 — Strong / repeatable</option><option value="5">5 — Proven / scalable</option>';
+    const ev=document.createElement('select');
+    ev.name='ev_'+d.key;
+    ev.id='ev-'+d.key;
+    ev.setAttribute('aria-label',d.label+' evidence basis');
+    ev.innerHTML='<option value="">Evidence: Unspecified</option><option value="estimate">Estimate / opinion</option><option value="partial">Partial records</option><option value="verified">Verified data</option>';
+    pair.append(select,ev);
+    box.append(label,pair,hint);
+    host.append(box);
+  }
+}
+
+function renderGates(){
+  const host=$('gateChecklist');
+  host.innerHTML=gateCriteria.map(g=>{
+    const checked=Boolean(assessment.gates?.[g.id]);
+    return `<div class="gate-item"><input type="checkbox" id="${g.id}" ${checked?'checked':''}><label for="${g.id}">${escapeHtml(g.text)}</label></div>`;
+  }).join('');
+  host.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+    cb.onchange=()=>{assessment.gates=assessment.gates||{};assessment.gates[cb.id]=cb.checked;scheduleSave();analyze();};
+  });
+}
+
+function getScores(){
+  let total=0,weightTotal=0,answered=0,verifiedCount=0;
+  const rows=[];
+  for(const d of dimensions){
+    const n=Number(document.querySelector(`[name="rating_${d.key}"]`)?.value||0);
+    const ev=document.querySelector(`[name="ev_${d.key}"]`)?.value||'';
+    if(n>0){
+      answered++;total+=(n/5)*100*d.weight;weightTotal+=d.weight;
+      if(ev==='verified')verifiedCount++;
+    }
+    rows.push({...d,value:n||null,score:n?Math.round(n/5*100):null,evidence:ev});
+  }
+  return {
+    score:weightTotal?Math.round(total/weightTotal):null,answered,
+    coverage:Math.round(answered/dimensions.length*100),
+    verifiedCount,verifiedPct:answered?Math.round(verifiedCount/answered*100):0,rows
+  };
+}
+
+function computeUnitEconomics(){
+  const revenue=numericValue('annualRevenue'),grossMargin=numericValue('grossMargin'),contribMargin=numericValue('contributionMargin');
+  const effMargin=contribMargin!==null?contribMargin:grossMargin;
+  const marginSource=contribMargin!==null?'contribution margin':(grossMargin!==null?'gross margin (proxy)':'none');
+  const cac=numericValue('cac'),arpc=numericValue('monthlyARPC'),lifespan=numericValue('customerLifespan');
+  const enteredPayback=numericValue('paybackMonths'),leads=numericValue('qualifiedLeads'),conv=numericValue('conversion');
+  const capacity=numericValue('capacity'),breakEven=numericValue('breakEven'),topShare=numericValue('topCustomerShare');
+
+  const monthlyContrib=(arpc!==null&&effMargin!==null)?arpc*(effMargin/100):null;
+  const impliedPayback=(cac!==null&&monthlyContrib!==null&&monthlyContrib>0)?cac/monthlyContrib:null;
+  const paybackMismatch=(impliedPayback!==null&&enteredPayback!==null&&Math.abs(impliedPayback-enteredPayback)>Math.max(1.5,enteredPayback*0.25));
+  const ltv=(monthlyContrib!==null&&lifespan!==null&&lifespan>0)?monthlyContrib*lifespan:null;
+  const ltvCac=(ltv!==null&&cac!==null&&cac>0)?ltv/cac:null;
+  const impliedNewCustMo=(leads!==null&&conv!==null)?leads*(conv/100):null;
+  const impliedNewRevMo=(impliedNewCustMo!==null&&arpc!==null)?impliedNewCustMo*arpc:null;
+  const capacityCeiling=(revenue!==null&&capacity!==null&&capacity>0)?revenue/(capacity/100):null;
+  const capacityHeadroom=(capacityCeiling!==null&&revenue!==null)?Math.max(0,capacityCeiling-revenue):null;
+  const monthlyRev=revenue!==null?revenue/12:null;
+  const breakEvenBuffer=(monthlyRev!==null&&breakEven!==null)?monthlyRev-breakEven:null;
+
+  return {revenue,grossMargin,contribMargin,effMargin,marginSource,cac,arpc,lifespan,enteredPayback,leads,conv,capacity,breakEven,topShare,monthlyContrib,impliedPayback,paybackMismatch,ltv,ltvCac,impliedNewCustMo,impliedNewRevMo,capacityCeiling,capacityHeadroom,monthlyRev,breakEvenBuffer};
+}
+
+function operationalSignals(ue){
+  const signals=[];
+  const runway=numericValue('runway'),net=numericValue('netMargin'),gross=ue.grossMargin,capacity=ue.capacity,growth=numericValue('revenueGrowth');
+  if(runway!==null&&runway<=1)signals.push({key:'cash-runway',title:'Very short cash runway',severity:'critical',text:'Prioritise an immediate cash position review and short-horizon cash forecast before taking on growth costs.'});
+  else if(runway!==null&&runway<=3)signals.push({key:'cash-runway',title:'Limited cash runway',severity:'high',text:'Build a rolling cash forecast and confirm working-capital needs before committing to expansion.'});
+  if(net!==null&&net<0)signals.push({key:'negative-net-margin',title:'Negative net margin',severity:'critical',text:'Investigate loss drivers and test a path to sustainable contribution before scaling volume.'});
+  if(gross!==null&&gross<=0)signals.push({key:'gross-margin',title:'Non-positive gross margin',severity:'critical',text:'Validate cost allocation, pricing, and delivery costs before pursuing higher sales volume.'});
+  if(capacity!==null&&capacity>=100)signals.push({key:'capacity',title:'Capacity at or above stated limit',severity:'high',text:'Resolve the delivery bottleneck and test quality at higher throughput before increasing demand.'});
+  else if(capacity!==null&&capacity>=85)signals.push({key:'capacity',title:'Capacity approaching its limit',severity:'medium',text:'Plan incremental capacity and quality controls before a larger growth push.'});
+  if(growth!==null&&growth<0)signals.push({key:'negative-growth',title:'Revenue contraction reported',severity:'high',text:'Diagnose customer, channel, pricing, or market changes before investing in expansion.'});
+  if(ue.topShare!==null&&ue.topShare>=40)signals.push({key:'concentration',title:'High customer concentration ('+ue.topShare+'%)',severity:ue.topShare>=60?'critical':'high',text:'Top 3 customers represent '+ue.topShare+'% of revenue. Diversify pipeline and protect key renewals before adding fixed overhead.'});
+  if(ue.ltvCac!==null&&ue.ltvCac<3)signals.push({key:'ltv-cac',title:'Weak LTV:CAC ratio ('+ue.ltvCac.toFixed(1)+'x)',severity:ue.ltvCac<1.5?'critical':'high',text:'Estimated gross-profit LTV:CAC is below the 3x benchmark. Improve retention, pricing, or acquisition efficiency before scaling spend.'});
+  if(ue.paybackMismatch)signals.push({key:'payback-mismatch',title:'Payback assumption mismatch',severity:'medium',text:`Entered payback (${ue.enteredPayback} mo) differs from implied payback (${ue.impliedPayback.toFixed(1)} mo) using ARPC, CAC, and ${ue.marginSource}. Reconcile before increasing spend.`});
+  if(ue.breakEvenBuffer!==null&&ue.breakEvenBuffer<0)signals.push({key:'below-breakeven',title:'Revenue below monthly break-even',severity:'critical',text:'Average monthly revenue is below stated monthly break-even. Close the contribution gap before expanding fixed costs.'});
+  return signals;
+}
+
+function buildHealth(x,signals){
+  let state='amber',title='Business health: Review needed',summary='Some indicators need attention. Validate source data and address the highest-priority risks before scaling.';
+  if(signals.some(s=>s.severity==='critical')){state='red';title='Business health: At risk';summary='One or more critical financial, concentration, or capacity signals need attention before committing to growth.';}
+  else if(x.answered===0){state='gray';title='Business health: Not assessed';summary='Rate the readiness components and enter current operating metrics to build an evidence-based status.';}
+  else if(x.coverage<40){state='gray';title='Business health: Insufficient evidence';summary='Assessment coverage is low; this status is provisional and should not be used to approve or reject a scaling decision.';}
+  else if(x.score>=65&&x.coverage>=50&&!signals.length){
+    state='green';title='Business health: Positive indicators';
+    summary=x.verifiedPct>=50?'Entered ratings and verified evidence suggest stronger readiness. Continue monitoring risks as you scale.':'Ratings look positive, but fewer than half are backed by verified records. Validate assumptions before committing major spend.';
+  }else if(signals.length||x.score<50){state='amber';title='Business health: Stabilise / validate';summary='Current inputs show growth constraints. Resolve bottlenecks and test improvements before a larger scale-up.';}
+  return {state,title,summary,meta:`${x.coverage}% coverage · ${x.verifiedPct}% verified evidence · ${signals.length?signals.map(s=>s.title).join(' · '):'No threshold warnings triggered'}`};
+}
+
+function renderUnitChecks(ue,redact=false){
+  const cards=[];
+  if(ue.impliedPayback!==null){
+    const diffTag=ue.paybackMismatch?'<span class="tag amber">Differs from entered ('+ue.enteredPayback+'m)</span>':'<span class="tag">Consistent</span>';
+    cards.push(`<div class="unit-box"><div class="k">Implied CAC payback (${escapeHtml(ue.marginSource)})</div><div class="v">${ue.impliedPayback.toFixed(1)} mo</div><div class="small">${ue.enteredPayback!==null?diffTag:'Compare vs. runway'}</div></div>`);
+  }
+  if(ue.ltvCac!==null){
+    const tag=ue.ltvCac>=3?'<span class="tag">Healthy (≥3x)</span>':(ue.ltvCac>=1.5?'<span class="tag amber">Tight (<3x)</span>':'<span class="tag red">Unsustainable</span>');
+    cards.push(`<div class="unit-box"><div class="k">Est. Gross-Profit LTV : CAC</div><div class="v">${ue.ltvCac.toFixed(1)}x</div><div class="small">LTV ${escapeHtml(money(ue.ltv,redact))} ${tag}</div></div>`);
+  }
+  if(ue.capacityHeadroom!==null){
+    cards.push(`<div class="unit-box"><div class="k">Revenue headroom before 100% capacity</div><div class="v">${escapeHtml(money(ue.capacityHeadroom,redact))}</div><div class="small">Ceiling: ${escapeHtml(money(ue.capacityCeiling,redact))}</div></div>`);
+  }
+  if(ue.impliedNewCustMo!==null){
+    cards.push(`<div class="unit-box"><div class="k">Implied funnel output / month</div><div class="v">${ue.impliedNewCustMo.toFixed(1)} cust.</div><div class="small">${ue.impliedNewRevMo!==null?'New MRR ~'+escapeHtml(money(ue.impliedNewRevMo,redact)):'Add ARPC for rev.'}</div></div>`);
+  }
+  if(ue.breakEvenBuffer!==null){
+    const tag=ue.breakEvenBuffer>=0?'<span class="tag">Above break-even</span>':'<span class="tag red">Below break-even</span>';
+    cards.push(`<div class="unit-box"><div class="k">Avg. monthly rev vs. break-even</div><div class="v">${ue.breakEvenBuffer>=0?'+':''}${escapeHtml(money(ue.breakEvenBuffer,redact))}</div><div class="small">${tag}</div></div>`);
+  }
+  if(ue.topShare!==null){
+    const tag=ue.topShare>=40?'<span class="tag red">Concentrated</span>':'<span class="tag">Diversified</span>';
+    cards.push(`<div class="unit-box"><div class="k">Top 3 customer concentration</div><div class="v">${ue.topShare}%</div><div class="small">${tag}</div></div>`);
+  }
+  if(!cards.length)return '<p class="muted">Enter baseline metrics (revenue, margin, CAC, ARPC, lifespan, leads, conversion, capacity, break-even) to unlock automated cross-checks.</p>';
+  return `<div class="unit-grid">${cards.join('')}</div>`;
+}
+
+function runSimulator(ue){
+  const host=$('simOutput');
+  const g=numericValue('simGrowth')??30,cacInf=numericValue('simCacInfl')??15,mDrop=numericValue('simMarginDrop')??3,stepCost=numericValue('simStepCost')??0;
+  $('simGrowthVal').textContent=g;$('simCacVal').textContent=cacInf;$('simMarginVal').textContent=mDrop;
+  if(ue.revenue===null){host.innerHTML='<p class="muted">Enter Annual Revenue in Section 1 to simulate target growth, capacity headroom, and cash requirements.</p>';return;}
+  const targetRev=ue.revenue*(1+g/100),incRevMo=(targetRev-ue.revenue)/12;
+  const capacityBreach=(ue.capacityCeiling!==null&&targetRev>ue.capacityCeiling);
+  const stressedMargin=(ue.effMargin!==null)?(ue.effMargin-mDrop):null;
+  const stressedCac=(ue.cac!==null)?ue.cac*(1+cacInf/100):null;
+  const stressedContribPerCust=(ue.arpc!==null&&stressedMargin!==null)?ue.arpc*(stressedMargin/100):null;
+  const stressedPayback=(stressedCac!==null&&stressedContribPerCust!==null&&stressedContribPerCust>0)?stressedCac/stressedContribPerCust:null;
+  const incCustMo=(ue.arpc!==null&&ue.arpc>0)?(incRevMo/ue.arpc):null;
+  const upfrontCacCash=(incCustMo!==null&&stressedCac!==null)?incCustMo*stressedCac*Math.min(Math.max(stressedPayback||3,1),12):0;
+  const totalStepAnnual=stepCost*12,estGrowthCashNeeded=upfrontCacCash+totalStepAnnual;
+  const newBreakEven=(ue.breakEven!==null&&stressedMargin!==null&&ue.effMargin!==null&&stressedMargin>0)?(ue.breakEven*(ue.effMargin/stressedMargin))+(stepCost/(stressedMargin/100)):null;
+
+  host.innerHTML=`
+    <div class="unit-grid">
+      <div class="unit-box"><div class="k">Target annual revenue (+${g}%)</div><div class="v">${escapeHtml(money(targetRev))}</div><div class="small">${capacityBreach?'<span class="tag red">Exceeds 100% capacity ceiling</span>':(ue.capacityCeiling?'<span class="tag">Within capacity ceiling</span>':'Add capacity % to verify')}</div></div>
+      <div class="unit-box"><div class="k">Stressed CAC & payback</div><div class="v">${stressedPayback!==null?stressedPayback.toFixed(1)+' mo':(stressedCac!==null?escapeHtml(money(stressedCac)):'—')}</div><div class="small">${stressedMargin!==null?'Stressed margin: '+stressedMargin.toFixed(1)+'%':'Add margin & CAC'}</div></div>
+      <div class="unit-box"><div class="k">Est. cash needed for growth (12m)</div><div class="v">${escapeHtml(money(estGrowthCashNeeded))}</div><div class="small">Step-up (${escapeHtml(money(totalStepAnnual))}) + upfront CAC (${escapeHtml(money(upfrontCacCash))})</div></div>
+    </div>
+    ${newBreakEven!==null?`<p class="small" style="margin-top:8px"><b>Stressed monthly break-even:</b> ${escapeHtml(money(newBreakEven))} (was ${escapeHtml(money(ue.breakEven))}) after -${mDrop} pts margin and +${escapeHtml(money(stepCost))}/mo fixed step-up.</p>`:''}
+    <p class="small">Formula: Incremental monthly customers × stressed CAC × min(stressed payback, 12m) + 12 × step-up fixed cost.</p>
+  `;
+}
+
+function radarSvg(rows){
+  const rated=rows.filter(r=>r.value!==null);
+  if(!rated.length)return '<p class="muted">Rate at least one component to build the chart.</p>';
+  const cx=180,cy=150,radius=102;
+  const point=(i,r)=>{const a=-Math.PI/2+i*Math.PI*2/rows.length;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r]};
+  const rings=[20,40,60,80,100].map(lvl=>`<circle cx="${cx}" cy="${cy}" r="${radius*lvl/100}" fill="none" stroke="#d7e7db" stroke-width="1"/>`).join('');
+  const axes=rows.map((row,i)=>{
+    const [x,y]=point(i,radius),[lx,ly]=point(i,radius+23);
+    return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#d7e7db"/><text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#405c4c">${escapeHtml(row.shortLabel)}</text>`;
+  }).join('');
+  const pts=rated.map(row=>{const [x,y]=point(rows.indexOf(row),radius*row.value/5);return `${x},${y}`}).join(' ');
+  const polygon=rated.length>=3?`<polygon points="${pts}" fill="#16a34a33" stroke="#15803d" stroke-width="2"/>`:'';
+  const dots=rated.map(row=>{const [x,y]=point(rows.indexOf(row),radius*row.value/5);return `<circle cx="${x}" cy="${y}" r="4" fill="#15803d"><title>${escapeHtml(row.label)}: ${row.value}/5</title></circle>`}).join('');
+  return `<svg class="chart" viewBox="0 0 360 300" role="img" aria-label="Radar chart showing assessed scale-readiness ratings out of five">${rings}${axes}${polygon}${dots}</svg>`;
+}
+
+function revenueSvg(){
+  const revenue=numericValue('annualRevenue'),growth=numericValue('revenueGrowth');
+  if(revenue===null||growth===null||revenue<0||growth<=-100)return '<p class="muted">Enter a non-negative annual revenue and growth rate above −100% to show this comparison.</p>';
+  const prior=revenue/(1+growth/100),max=Math.max(revenue,prior,1),base=135,scale=100/max;
+  const bars=[{label:'Prior 12m (implied)',value:prior,x:65},{label:'Current 12m (entered)',value:revenue,x:205}];
+  return `<svg class="chart" viewBox="0 0 360 180" role="img" aria-label="Derived annual revenue comparison"><line x1="30" y1="${base}" x2="330" y2="${base}" stroke="#a9bcae"/>${bars.map(b=>`<rect x="${b.x}" y="${base-b.value*scale}" width="78" height="${b.value*scale}" rx="5" fill="${b.x===65?'#72b98a':'#15803d'}"/><text x="${b.x+39}" y="${Math.max(14,base-b.value*scale-7)}" text-anchor="middle" font-size="11" fill="#173326">${escapeHtml(money(b.value))}</text><text x="${b.x+39}" y="154" text-anchor="middle" font-size="9" fill="#405c4c">${escapeHtml(b.label)}</text>`).join('')}<text x="180" y="174" text-anchor="middle" font-size="10" fill="#5c7465">Change: ${growth>=0?'+':''}${growth}% (user-entered)</text></svg>`;
+}
+
+function recommendationText(row){
+  const map={
+    demand:'Validate demand and retention with a small customer cohort; document evidence before expanding acquisition spend.',
+    unitEconomics:'Recheck pricing, contribution margin, CAC and payback by channel; set a minimum viable margin and stop rule.',
+    salesRepeatability:'Document the sales funnel and run a time-boxed channel test; measure qualified leads, conversion and acquisition cost.',
+    delivery:'Model the next capacity step; test staffing, suppliers, service levels and quality controls before increasing volume.',
+    processes:'Document critical workflows, ownership, controls and weekly operating measures; automate only stable processes.',
+    team:'Clarify decision rights and hire/develop the role that removes the current founder or management bottleneck.',
+    cash:'Build a rolling 13-week cash forecast and downside case; confirm working-capital requirements before funding growth.',
+    supply:'Stress-test supplier capacity and lead times; qualify alternatives for critical inputs and partners.',
+    governance:'Review jurisdiction-specific compliance, contracts, data protection and cyber controls with qualified specialists.',
+    measurement:'Set a small KPI set with a baseline, owner and review cadence; require evidence for each growth experiment.'
+  };
+  return map[row.key];
+}
+
+function buildRecommendations(x,signals){
+  const recs=x.rows.filter(r=>r.value!==null&&r.value<=3).map(r=>({key:r.key,title:r.label.replace(/^\d+\.\s*/,''),rating:r.value,text:recommendationText(r),timing:r.value<=2?'0–30 days':'31–90 days',measure:'Record evidence that the identified capability improved.'}));
+  for(const s of signals)recs.push({key:s.key,title:s.title,rating:null,text:s.text,timing:s.severity==='critical'?'Immediate / 0–7 days':'0–30 days',measure:'Confirm the risk has reduced using dated operating evidence.'});
+  return recs.filter((r,i,a)=>a.findIndex(z=>z.key===r.key)===i).sort((a,b)=>(a.rating??0)-(b.rating??0)).slice(0,10);
+}
+
+function addRecommendationTask(r,phase=r.timing){
+  if((assessment.tasks||[]).some(t=>t.sourceKey===r.key))return;
+  const days=phase.startsWith('Immediate')?7:phase.startsWith('0–30')?30:phase.startsWith('31–90')?90:180;
+  const due=new Date();due.setDate(due.getDate()+days);
+  assessment.tasks.push({id:newId(),sourceKey:r.key,name:r.text,owner:'',due:due.toISOString().slice(0,10),priority:phase.startsWith('Immediate')||phase.startsWith('0–30')?'P1 — Urgent':phase.startsWith('31–90')?'P2 — Important':'P3 — Planned',measure:r.measure,timing:phase,done:false});
+}
+
+function renderRecommendations(x,recs){
+  const host=$('recommendedActions');
+  if(!recs.length){host.innerHTML='<h3>Suggested priorities</h3><p class="muted">No low-rated component or threshold warning was identified in the entered data. Validate the evidence, then define a small capped growth experiment.</p>';return;}
+  const existingKeys=new Set((assessment.tasks||[]).map(t=>t.sourceKey).filter(Boolean));
+  host.innerHTML='<h3>Automatically generated recommendations</h3><p class="small">Prioritised from low self-rated components, unit-economics checks, and operating signals.</p>'+
+    recs.map((r,i)=>{
+      const added=existingKeys.has(r.key);
+      return `<div class="alert ${r.rating===1||r.timing.startsWith('Immediate')?'red':''}"><b>${i+1}. ${escapeHtml(r.title)}</b> ${r.rating?`<span class="tag ${r.rating<=2?'red':'amber'}">Rating ${r.rating}/5</span>`:'<span class="tag red">Operating signal</span>'}<p>${escapeHtml(r.text)}</p><p class="small">Suggested timing: ${escapeHtml(r.timing)} · Completion evidence: ${escapeHtml(r.measure)}</p><button class="btn smallbtn add-suggestion" data-key="${escapeHtml(r.key)}" ${added?'disabled':''}>${added?'Added to tracker':'Add to action tracker'}</button></div>`;
+    }).join('');
+  host.querySelectorAll('.add-suggestion').forEach(b=>b.onclick=()=>{const r=recs.find(z=>z.key===b.dataset.key);if(r)addRecommendationTask(r);renderTasks();scheduleSave();analyze();});
+}
+
+function buildPhases(recs){
+  let phases=[
+    {title:'Immediate / 0–30 days',items:recs.filter(r=>r.timing.startsWith('Immediate')||r.timing.startsWith('0–30'))},
+    {title:'31–90 days',items:recs.filter(r=>r.timing.startsWith('31–90'))},
+    {title:'3–6 months',items:recs.filter(r=>!r.timing.startsWith('Immediate')&&!r.timing.startsWith('0–30')&&!r.timing.startsWith('31–90'))}
+  ];
+  if(!phases.some(p=>p.items.length)){
+    phases=[
+      {title:'Immediate / 0–30 days',items:[{key:'evidence-check',title:'Validate baseline and evidence',text:'Confirm revenue, margin, customer, and capacity baselines from dated source records.'}]},
+      {title:'31–90 days',items:[{key:'growth-test',title:'Run a capped growth experiment',text:'Select one channel or segment, set a budget cap and stop rule, then review results before scaling spend.'}]},
+      {title:'3–6 months',items:[{key:'scale-gate',title:'Review scale-up gate',text:'Increase investment only if demand, unit economics, delivery capacity, and cash remain within agreed thresholds.'}]}
+    ];
+  }else if(!phases[2].items.length){
+    phases[2].items=[{key:'scale-gate',title:'Review scale-up gate',text:'Increase investment only if demand, unit economics, delivery capacity, and cash remain within agreed thresholds; pause if quality, cash, or retention deteriorates.'}];
+  }
+  return phases;
+}
+
+function renderRoadmap(recs,phases){
+  const html=`<div class="phase-grid">${phases.map(p=>`<div class="phase-card"><h4>${escapeHtml(p.title)}</h4>${p.items.length?`<ul>${p.items.map(r=>`<li><b>${escapeHtml(r.title)}</b><br>${escapeHtml(r.text)}</li>`).join('')}</ul>`:'<p class="small">No specific gap identified in this phase.</p>'}</div>`).join('')}</div>`;
+  $('phaseRoadmap').innerHTML=html;
+  $('addAllRoadmap').disabled=!recs.length;
+  $('addAllRoadmap').onclick=()=>{
+    recs.forEach(r=>addRecommendationTask(r,r.timing));renderTasks();scheduleSave();analyze();
+    $('addAllRoadmap').textContent='Suggested actions added';
+    setTimeout(()=>{$('addAllRoadmap').textContent='Add all suggested priorities to tracker';},1800);
+  };
+  return html;
+}
+
+function buildGuidance(x,signals){
+  const low=x.rows.filter(r=>r.value!==null&&r.value<=2).sort((a,b)=>a.value-b.value);
+  let guidance=x.score===null?'Rate at least one readiness dimension. More complete coverage makes the result more informative.':
+    x.coverage<40?'Coverage is low. Treat this as a prompt for discovery, not a scale/no-scale conclusion.':
+    x.score<40?'Prioritise cash, delivery reliability, unit economics, and risk controls before committing to major expansion.':
+    x.score<65?'Run small, measurable growth tests and close the lowest-rated readiness gaps before committing significant capital.':
+    x.score<82?'Scale the proven channel in controlled steps. Monitor margin, service quality, cash, and team capacity at each step.':
+    'Entered ratings suggest stronger readiness; validate verified evidence and stress-test capacity, cash, and downside scenarios before scaling.';
+  if(low.length)guidance+=' First review: '+low.slice(0,3).map(r=>r.label.replace(/^\d+\.\s*/,'')).join('; ')+'.';
+  if(signals.length)guidance+=' Alerts: '+signals.map(s=>s.title).join('; ')+'.';
+  return {guidance,low};
+}
+
+function renderReport(x,ue,health,guidanceObj,phasesHtml){
+  const redact=$('redactReportToggle').checked;
+  const business=document.querySelector('[name="businessName"]').value||'Business not named';
+  const model=document.querySelector('[name="businessModel"]').value||'Model not stated';
+  const stage=document.querySelector('[name="stage"]').value||'Stage not stated';
+  const objective=document.querySelector('[name="growthObjective"]').value||'Not recorded';
+  const source=document.querySelector('[name="dataSource"]').value||'Not recorded';
+  const tasks=assessment.tasks||[],openTasks=tasks.filter(t=>!t.done),doneTasks=tasks.filter(t=>t.done);
+  const gatesPassed=gateCriteria.filter(g=>assessment.gates?.[g.id]).length,exps=assessment.experiments||[];
+
+  $('reportBody').innerHTML=`
+    <div class="cards">
+      <div class="metric"><div class="k">Business</div><div class="v" style="font-size:17px">${escapeHtml(business)}</div><div class="note">${escapeHtml(model)} · ${escapeHtml(stage)}</div></div>
+      <div class="metric"><div class="k">Readiness</div><div class="v">${x.score===null?'—':x.score+'/100'}</div><div class="note">${escapeHtml(level(x.score))}</div></div>
+      <div class="metric"><div class="k">Evidence</div><div class="v">${x.coverage}% / ${x.verifiedPct}%</div><div class="note">Coverage / Verified</div></div>
+      <div class="metric"><div class="k">Annual revenue</div><div class="v" style="font-size:17px">${escapeHtml(money(ue.revenue,redact))}</div><div class="note">Self-entered baseline</div></div>
+      <div class="metric"><div class="k">Pre-scale gate</div><div class="v">${gatesPassed}/${gateCriteria.length}</div><div class="note">Gate items verified</div></div>
+    </div>
+    <div class="card"><h3>${escapeHtml(health.title)}</h3><p>${escapeHtml(health.summary)}</p><p class="small">${escapeHtml(health.meta)}</p></div>
+    <div class="card"><h3>Unit economics & capacity sanity checks</h3>${renderUnitChecks(ue,redact)}</div>
+    <div class="card"><h3>Growth objective</h3><p>${escapeHtml(objective)}</p><p class="small">Baseline source: ${escapeHtml(source)}</p></div>
+    <div class="card"><h3>Readiness by component</h3>${radarSvg(x.rows)}
+      <div class="tablewrap"><table><thead><tr><th>Component</th><th>Rating</th><th>Evidence basis</th><th>Focus prompt</th></tr></thead><tbody>
+        ${x.rows.map(r=>`<tr><td>${escapeHtml(r.label)}</td><td>${r.value===null?'Not assessed':r.value+'/5'}</td><td>${escapeHtml(r.evidence||'Unspecified')}</td><td>${escapeHtml(r.help)}</td></tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div class="card"><h3>Key decision points</h3><p>${escapeHtml(guidanceObj.guidance)}</p>${guidanceObj.low.length?`<p><b>Lowest-rated areas:</b> ${guidanceObj.low.map(r=>`${escapeHtml(r.label.replace(/^\d+\.\s*/,''))} (${r.value}/5)`).join('; ')}</p>`:''}</div>
+    <div class="card"><h3>Generated phased roadmap</h3>${phasesHtml}</div>
+    <div class="card"><h3>Growth model & assumptions</h3><div class="tablewrap"><table><tbody>
+      ${[['Growth route','growthRoute'],['Target segment','targetSegment'],['Primary channel','growthChannel'],['Contribution margin %','contributionMargin'],['CAC','cac'],['Payback months','paybackMonths'],['Cash runway months','runway'],['Delivery bottleneck','bottleneck'],['Risk plan','riskPlan']].map(([lbl,k])=>{
+        const val=document.querySelector(`[name="${k}"]`)?.value||'Not recorded';
+        const out=(redact&&(k==='cac'))?'[Redacted]':val;
+        return `<tr><th>${escapeHtml(lbl)}</th><td>${escapeHtml(out)}</td></tr>`;
+      }).join('')}
+    </tbody></table></div></div>
+    <div class="card"><h3>Scaling experiments (${exps.length})</h3>
+      ${exps.length?exps.map(e=>`<p><b>${escapeHtml(e.verdict||'Planned')}:</b> ${escapeHtml(e.hypothesis)} <span class="small">(${escapeHtml(e.channel||'—')} · Cap: ${escapeHtml(e.cap||'—')} · Stop: ${escapeHtml(e.stopRule||'—')})</span></p>`).join(''):'<p class="muted">No structured experiments logged.</p>'}
+    </div>
+    <div class="card"><h3>Roadmap actions (${openTasks.length} open, ${doneTasks.length} completed)</h3>
+      ${openTasks.length?openTasks.map(t=>`<p>☐ <b>[${escapeHtml(t.priority||'P2')}]</b> ${escapeHtml(t.name)} — ${escapeHtml(t.owner||'Unassigned')} · ${escapeHtml(t.due||'No due date')} · ${escapeHtml(t.measure||'No measure')}</p>`).join(''):'<p class="muted">No open actions.</p>'}
+      ${doneTasks.length?`<div style="margin-top:8px">${doneTasks.map(t=>`<p class="small">☑ ${escapeHtml(t.name)} (${escapeHtml(t.owner||'—')})</p>`).join('')}</div>`:''}
+    </div>`;
+}
+
+function analyze(){
+  if(!isUnlocked)return null;
+  const x=getScores(),ue=computeUnitEconomics(),signals=operationalSignals(ue),health=buildHealth(x,signals),tasks=assessment.tasks||[];
+  $('dashScore').textContent=x.score===null?'—':x.score+'/100';
+  $('dashCoverage').textContent=x.coverage+'%';
+  $('dashVerified').textContent=x.verifiedPct+'%';
+  $('dashRevenue').textContent=money(ue.revenue);
+  $('dashActions').textContent=tasks.filter(t=>!t.done).length;
+
+  const hBox=$('healthStatus');
+  hBox.className='healthbox '+health.state;
+  hBox.innerHTML=`<h3>${escapeHtml(health.title)}</h3><p>${escapeHtml(health.summary)}</p><p class="small">${escapeHtml(health.meta)} · Indicative status based only on entered information.</p>`;
+
+  $('unitChecksBox').innerHTML=renderUnitChecks(ue);
+  runSimulator(ue);
+
+  $('scoreChart').innerHTML=x.rows.filter(r=>r.score!==null).map(r=>`<div><div style="display:flex;justify-content:space-between;gap:10px"><b>${escapeHtml(r.label)}</b><span>${r.score}/100 <span class="small">(${escapeHtml(r.evidence||'unspecified')})</span></span></div><div class="bar"><div style="width:${r.score}%"></div></div></div>`).join('')||'<p class="muted">No readiness ratings entered.</p>';
+  $('radarChart').innerHTML=radarSvg(x.rows);
+  $('revenueChart').innerHTML=revenueSvg();
+
+  const guidanceObj=buildGuidance(x,signals);
+  $('decisionBox').innerHTML=`<span class="tag ${x.score!==null&&x.score<40?'red':x.score!==null&&x.score<65?'amber':''}">${escapeHtml(level(x.score))}</span><p>${escapeHtml(guidanceObj.guidance)}</p><p class="small">Coverage: ${x.answered}/${dimensions.length} components · Verified records: ${x.verifiedCount}/${x.answered||0}.</p>`;
+
+  const recs=buildRecommendations(x,signals);
+  renderRecommendations(x,recs);
+  const phases=buildPhases(recs);
+  const phasesHtml=renderRoadmap(recs,phases);
+  renderReport(x,ue,health,guidanceObj,phasesHtml);
+  return x;
+}
+
+function saveSnapshot(){
+  if(!isUnlocked)return;
+  const x=getScores(),ue=computeUnitEconomics(),signals=operationalSignals(ue),health=buildHealth(x,signals);
+  assessment.history=assessment.history||[];
+  assessment.history.unshift({
+    id:newId(),date:todayYmd(),time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+    score:x.score,coverage:x.coverage,verifiedPct:x.verifiedPct,revenue:ue.revenue,
+    netMargin:numericValue('netMargin'),runway:numericValue('runway'),cac:ue.cac,
+    health:health.title.replace('Business health: ','')
+  });
+  renderHistory();scheduleSave();
+}
+
+function renderHistory(){
+  const host=$('historyList'),list=assessment.history||[];
+  if(!list.length){host.innerHTML='<p class="muted">No snapshots saved yet. Click “Save dated snapshot” to start tracking progress over time.</p>';return;}
+  host.innerHTML=`<div class="tablewrap"><table><thead><tr><th>Date</th><th>Readiness</th><th>Coverage / Verified</th><th>Revenue</th><th>Net Margin / Runway</th><th>Health</th><th></th></tr></thead><tbody>
+    ${list.map((s,i)=>{
+      const prev=list[i+1],delta=(prev&&s.score!==null&&prev.score!==null)?s.score-prev.score:null;
+      const dTxt=delta===null?'':` <span class="tag ${delta>=0?'':'red'}">${delta>=0?'+':''}${delta}</span>`;
+      return `<tr><td>${escapeHtml(s.date)}<br><span class="small">${escapeHtml(s.time||'')}</span></td><td>${s.score===null?'—':s.score+'/100'}${dTxt}</td><td>${s.coverage}% / ${s.verifiedPct}%</td><td>${escapeHtml(money(s.revenue))}</td><td>${s.netMargin!==null?s.netMargin+'%':'—'} · ${s.runway!==null?s.runway+'m':'—'}</td><td>${escapeHtml(s.health)}</td><td><button class="btn smallbtn del-snap" data-id="${escapeHtml(s.id)}">Remove</button></td></tr>`;
+    }).join('')}
+  </tbody></table></div>`;
+  host.querySelectorAll('.del-snap').forEach(b=>b.onclick=()=>{assessment.history=(assessment.history||[]).filter(z=>z.id!==b.dataset.id);renderHistory();scheduleSave();});
+}
+
+function addExperiment(){
+  const hypothesis=$('expHyp').value.trim();
+  if(!hypothesis){$('expHyp').focus();return;}
+  assessment.experiments=assessment.experiments||[];
+  assessment.experiments.unshift({id:newId(),hypothesis,channel:$('expChannel').value.trim(),cap:$('expCap').value.trim(),metric:$('expMetric').value.trim(),stopRule:$('expStop').value.trim(),outcome:'',verdict:'Planned',createdAt:todayYmd()});
+  ['expHyp','expChannel','expCap','expMetric','expStop'].forEach(id=>$(id).value='');
+  renderExperiments();scheduleSave();analyze();
+}
+
+function renderExperiments(){
+  const host=$('experimentList'),exps=assessment.experiments||[];
+  if(!exps.length){host.innerHTML='<p class="muted">No scaling experiments logged yet.</p>';return;}
+  host.innerHTML=exps.map((e,i)=>`
+    <div class="exp-card" data-idx="${i}">
+      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center">
+        <b>${escapeHtml(e.hypothesis)}</b>
+        <select class="exp-verdict" aria-label="Experiment verdict" style="width:auto;padding:5px 8px">
+          ${['Planned','Running','Scale','Iterate','Kill'].map(v=>`<option ${e.verdict===v?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="small" style="margin:4px 0">Channel: ${escapeHtml(e.channel||'—')} · Cap: ${escapeHtml(e.cap||'—')} · Target: ${escapeHtml(e.metric||'—')}</div>
+      <div class="small"><b>Stop rule:</b> ${escapeHtml(e.stopRule||'None set')}</div>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <input class="exp-outcome" placeholder="Record measured outcome & learning…" value="${escapeHtml(e.outcome||'')}" style="padding:6px 9px;font-size:13px">
+        <button class="btn smallbtn del-exp">Remove</button>
+      </div>
+    </div>`).join('');
+  host.querySelectorAll('.exp-verdict').forEach(s=>s.onchange=()=>{exps[Number(s.closest('.exp-card').dataset.idx)].verdict=s.value;scheduleSave();analyze();});
+  host.querySelectorAll('.exp-outcome').forEach(inp=>inp.onchange=()=>{exps[Number(inp.closest('.exp-card').dataset.idx)].outcome=inp.value;scheduleSave();analyze();});
+  host.querySelectorAll('.del-exp').forEach(b=>b.onclick=()=>{exps.splice(Number(b.closest('.exp-card').dataset.idx),1);renderExperiments();scheduleSave();analyze();});
+}
+
+function isOverdue(t){return !t.done&&Boolean(t.due)&&t.due<todayYmd();}
+
+function renderTasks(){
+  const host=$('taskList'),tasks=assessment.tasks||[];
+  const filtered=tasks.map((t,idx)=>({t,idx})).filter(({t})=>{
+    if(taskFilter==='open')return !t.done;
+    if(taskFilter==='done')return t.done;
+    if(taskFilter==='p1')return (t.priority||'').startsWith('P1')&&!t.done;
+    if(taskFilter==='overdue')return isOverdue(t);
+    return true;
+  });
+  if(!tasks.length){host.innerHTML='<p class="muted">No actions yet.</p>';return;}
+  if(!filtered.length){host.innerHTML='<p class="muted">No actions match the selected filter.</p>';return;}
+
+  host.innerHTML=filtered.map(({t,idx})=>{
+    const over=isOverdue(t),pTag=(t.priority||'P2').startsWith('P1')?'red':((t.priority||'P2').startsWith('P2')?'amber':'gray');
+    return `<div class="task ${t.done?'done':''} ${over?'overdue':''}" data-index="${idx}">
+      <div class="task-name">
+        <div style="margin-bottom:3px"><span class="tag ${pTag}">${escapeHtml((t.priority||'P2 — Important').split(' ')[0])}</span> ${t.timing?`<span class="tag gray">${escapeHtml(t.timing)}</span>`:''} ${over?'<span class="tag red">Overdue</span>':''}</div>
+        <b>${escapeHtml(t.name)}</b>
+        <div class="small" style="margin-top:4px"><input class="task-edit-measure" value="${escapeHtml(t.measure||'')}" placeholder="Success measure / proof" style="padding:4px 7px;font-size:12px"></div>
+      </div>
+      <div class="status">
+        <input class="task-edit-owner" value="${escapeHtml(t.owner||'')}" placeholder="Owner" aria-label="Task owner" style="padding:4px 7px;font-size:12px;margin-bottom:4px">
+        <input class="task-edit-due" type="date" value="${escapeHtml(t.due||'')}" aria-label="Task due date" style="padding:4px 7px;font-size:12px">
+      </div>
+      <select class="task-state" aria-label="Action status">
+        <option value="open" ${!t.done?'selected':''}>Open</option>
+        <option value="done" ${t.done?'selected':''}>Done</option>
+      </select>
+      <button class="btn smallbtn remove-task">Remove</button>
+    </div>`;
+  }).join('');
+
+  host.querySelectorAll('.task-state').forEach(s=>s.onchange=()=>{tasks[Number(s.closest('.task').dataset.index)].done=s.value==='done';renderTasks();scheduleSave();analyze();});
+  host.querySelectorAll('.task-edit-owner').forEach(inp=>inp.onchange=()=>{tasks[Number(inp.closest('.task').dataset.index)].owner=inp.value.trim();scheduleSave();analyze();});
+  host.querySelectorAll('.task-edit-due').forEach(inp=>inp.onchange=()=>{tasks[Number(inp.closest('.task').dataset.index)].due=inp.value;renderTasks();scheduleSave();analyze();});
+  host.querySelectorAll('.task-edit-measure').forEach(inp=>inp.onchange=()=>{tasks[Number(inp.closest('.task').dataset.index)].measure=inp.value.trim();scheduleSave();analyze();});
+  host.querySelectorAll('.remove-task').forEach(b=>b.onclick=()=>{tasks.splice(Number(b.closest('.task').dataset.index),1);renderTasks();scheduleSave();analyze();});
+}
+
+function addTask(){
+  const name=$('taskName').value.trim();
+  if(!name){$('taskName').focus();return;}
+  assessment.tasks=assessment.tasks||[];
+  assessment.tasks.push({id:newId(),name,owner:$('taskOwner').value.trim(),due:$('taskDue').value,priority:$('taskPriority').value,measure:$('taskMeasure').value.trim(),done:false});
+  ['taskName','taskOwner','taskDue','taskMeasure'].forEach(id=>$(id).value='');
+  renderTasks();scheduleSave();analyze();
+}
+
+function csvSafeCell(v){
+  let s=String(v??'').replace(/\r?\n/g,' ');
+  if(/^[=+\-@\t\r]/.test(s))s="'"+s;
+  return `"${s.replace(/"/g,'""')}"`;
+}
+function exportTasksCsv(){
+  const tasks=assessment.tasks||[];
+  if(!tasks.length){alert('No actions to export.');return;}
+  const header=['Status','Priority','Timing','Action','Owner','Due Date','Success Measure'];
+  const rows=tasks.map(t=>[t.done?'Done':'Open',t.priority||'',t.timing||'',t.name,t.owner||'',t.due||'',t.measure||''].map(csvSafeCell).join(','));
+  safeDownload(new Blob([[header.map(csvSafeCell).join(','),...rows].join('\n')],{type:'text/csv;charset=utf-8'}),'U1V1_roadmap_actions_'+todayYmd()+'.csv');
+}
+
+function coachReply(question){
+  const q=question.toLowerCase(),x=getScores(),ue=computeUnitEconomics(),signals=operationalSignals(ue);
+  const weak=x.rows.filter(r=>r.value!==null).sort((a,b)=>a.value-b.value).slice(0,3);
+  const runway=numericValue('runway'),net=numericValue('netMargin'),gross=ue.grossMargin,cap=ue.capacity,growth=numericValue('revenueGrowth');
+  let answer;
+
+  if(/ltv|cac|unit economic|payback|margin|profit|pricing/.test(q)){
+    const parts=[`Gross margin: ${gross===null?'not entered':gross+'%'}; Net margin: ${net===null?'not entered':net+'%'}.`];
+    if(ue.impliedPayback!==null)parts.push(`Implied CAC payback is ${ue.impliedPayback.toFixed(1)} month(s)${ue.paybackMismatch?` (differs from your entered ${ue.enteredPayback} mo)`:''}.`);
+    if(ue.ltvCac!==null)parts.push(`Estimated Gross-Profit LTV:CAC is ${ue.ltvCac.toFixed(1)}x (benchmark ≥3.0x).`);
+    else parts.push('Add Average Customer Lifespan, ARPC, CAC, and Contribution Margin to calculate LTV:CAC and implied payback.');
+    if(net!==null&&net<0)parts.push('Net margin is negative—fix loss drivers before increasing acquisition spend.');
+    answer=parts.join(' ');
+  }else if(/cash|runway|fund|working capital|liquidity/.test(q)){
+    answer=runway===null?'Cash runway is not entered. Add a current runway estimate, then run the Scale Stress-Test Simulator on the Levers page.':
+      `Entered cash runway is ${runway} month(s). Verify against a 13-week rolling cash forecast and test whether your runway survives upfront CAC and step-up fixed costs in the Simulator.`;
+    if(runway!==null&&runway<=3)answer+=' Near-term cash protection is an urgent priority.';
+  }else if(/capacity|headroom|delivery|operation|quality|bottleneck|team/.test(q)){
+    answer=cap===null?'Capacity utilisation is not entered. Estimate practical capacity to unlock your revenue headroom calculation.':
+      `Capacity utilisation is ${cap}%${ue.capacityHeadroom!==null?` (approx. ${money(ue.capacityHeadroom)} annual revenue headroom before hitting 100% capacity)`:''}. ${cap>=85?'You are near the capacity ceiling—plan step-up capacity and quality checks before pushing demand.':'Confirm whether people, suppliers, or working capital will bind first.'}`;
+  }else if(/experiment|test|sales|customer|demand|channel|lead/.test(q)){
+    const running=(assessment.experiments||[]).filter(e=>e.verdict==='Running'||e.verdict==='Planned').length;
+    answer=`Leads/mo: ${ue.leads??'—'}; Conversion: ${ue.conv!==null?ue.conv+'%':'—'}; Repeat rate: ${numericValue('repeatRate')!==null?numericValue('repeatRate')+'%':'—'}. You currently have ${running} planned/running experiment(s) in the ledger.`;
+  }else if(/risk|scale|danger|concentrat|problem/.test(q)){
+    answer=signals.length?'Active risk signals: '+signals.map(s=>s.title+' — '+s.text).join(' '):'No threshold alert was triggered from entered metrics. Check Evidence Verified % ('+x.verifiedPct+'%) and complete the Pre-Scale Gate Checklist on the Roadmap tab.';
+  }else if(/roadmap|plan|next|first|priorit|focus|90 day/.test(q)){
+    answer=weak.length?`Lowest-rated capabilities: ${weak.map(r=>r.label.replace(/^\d+\.\s*/,'')+' ('+r.value+'/5)').join(', ')}. Evidence Verified is ${x.verifiedPct}%. Tackle P1 risks in 0–30 days, run one capped experiment in 31–90 days, and clear the Pre-Scale Gate before expanding.`:
+      'Improve assessment coverage and verify baseline records first, then log one time-boxed scaling experiment with a clear stop rule.';
+  }else{
+    answer=weak.length?`Focus first on ${weak.map(r=>r.label.replace(/^\d+\.\s*/,'')).join(', ')}. Ask about unit economics, cash runway, capacity headroom, risks, or your 90-day roadmap.`:
+      'Complete the scale-readiness ratings and baseline metrics, or ask about unit economics, cash, capacity headroom, risks, or roadmap priorities.';
+  }
+  if(growth!==null&&/growth|revenue/.test(q))answer+=` Reported LTM growth is ${growth}%.`;
+  return answer;
+}
+
+function addCoachMessage(text,kind){
+  const item=document.createElement('div');
+  item.className='coach-message '+kind;
+  item.textContent=text;
+  $('coachLog').append(item);
+  $('coachLog').scrollTop=$('coachLog').scrollHeight;
+}
+function askCoach(question){const q=question.trim();if(!q)return;addCoachMessage(q,'user');addCoachMessage(coachReply(q),'assistant');}
+
+function go(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===page));
+  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  if(page==='report')analyze();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function safeDownload(blob,name){
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+async function exportBackup(){
+  if(!vaultKey)return;
+  try{
+    const record=await encryptRecord(gather(),vaultKey);
+    safeDownload(new Blob([JSON.stringify(record,null,2)],{type:'application/json'}),'U1V1_encrypted_backup_'+todayYmd()+'.json');
+    setStatus('Encrypted backup exported');
+  }catch(e){setStatus('Backup export failed',true);console.error(e);}
+}
+
+function gateInit(){
+  let existing=null;
+  try{existing=localStorage.getItem(STORAGE_KEY);}
+  catch(e){$('gateStatus').textContent='Browser storage is unavailable. Check privacy settings.';return;}
+  if(existing){
+    $('gateTitle').textContent='Unlock your encrypted vault';
+    $('gateIntro').textContent='Enter the passphrase used when this vault was created.';
+    $('vaultButton').textContent='Unlock vault';
+    $('confirmWrap').classList.add('hidden');
+  }else{
+    $('gateTitle').textContent='Create your encrypted vault';
+    $('gateIntro').textContent='Assessment details are encrypted before being saved in this browser. Choose a strong passphrase and keep a separate, secure backup.';
+    $('vaultButton').textContent='Create encrypted vault';
+    $('confirmWrap').classList.remove('hidden');
+  }
+}
+
+async function unlock(){
+  if(!activeLicense){$('gateStatus').textContent='Active license required first.';return;}
+  const pass=$('vaultPass').value;
+  if(!window.crypto||!window.crypto.subtle){$('gateStatus').textContent='Web Crypto is unavailable.';return;}
+  let existing;
+  try{existing=localStorage.getItem(STORAGE_KEY);}
+  catch(e){$('gateStatus').textContent='Browser storage is unavailable.';return;}
+  try{
+    if(existing){
+      const rec=JSON.parse(existing);
+      if(!rec.salt||!rec.iv||!rec.ciphertext)throw new Error('Invalid encrypted vault');
+      vaultSalt=unb64(rec.salt);vaultKey=await deriveKey(pass,vaultSalt);
+      const data=await decryptRecord(rec,vaultKey);
+      isUnlocked=true;populate(data);
+    }else{
+      if(pass.length<12){$('gateStatus').textContent='Use a passphrase with at least 12 characters.';return;}
+      if(pass!==$('vaultConfirm').value){$('gateStatus').textContent='Passphrases do not match.';return;}
+      vaultSalt=randomBytes(16);vaultKey=await deriveKey(pass,vaultSalt);
+      isUnlocked=true;renderGates();renderTasks();renderExperiments();renderHistory();analyze();
+      await saveNow();
+    }
+    $('vaultPass').value='';$('vaultConfirm').value='';$('gateStatus').textContent='';
+    $('vaultGate').classList.add('hidden');
+    setStatus('Vault unlocked');
+  }catch(e){
+    vaultKey=null;isUnlocked=false;
+    $('gateStatus').textContent=existing?'Could not unlock: wrong passphrase or damaged vault.':'Could not create encrypted vault.';
+    console.error('Vault unlock failed',e);
+  }
+}
+
+async function importBackup(file){
+  if(!file)return;
+  try{
+    const rec=JSON.parse(await file.text());
+    if(rec.app!=='U1V1 Scaling & Growth Workspace'||!rec.salt||!rec.iv||!rec.ciphertext)throw new Error('Not a supported encrypted U1V1 backup');
+    pendingImportRecord=rec;$('importPass').value='';$('importStatus').textContent='';
+    $('importGate').classList.remove('hidden');$('importPass').focus();
+  }catch(e){alert('Backup file could not be read or is not a supported U1V1 encrypted backup.');console.error(e);}
+  finally{$('backupFile').value='';}
+}
+
+async function confirmImportBackup(){
+  if(!pendingImportRecord)return;
+  const pass=$('importPass').value;
+  if(!pass){$('importStatus').textContent='Enter the backup passphrase.';return;}
+  try{
+    const salt=unb64(pendingImportRecord.salt),key=await deriveKey(pass,salt),data=await decryptRecord(pendingImportRecord,key);
+    vaultSalt=salt;vaultKey=key;isUnlocked=true;
+    $('importPass').value='';$('importGate').classList.add('hidden');pendingImportRecord=null;
+    populate(data);await saveNow();setStatus('Encrypted backup imported');
+  }catch(e){$('importStatus').textContent='Wrong passphrase or corrupted backup file.';console.error(e);}
+}
+
+function lock(){
+  clearTimeout(saveTimer);
+  saveNow().finally(()=>{
+    isUnlocked=false;vaultKey=null;vaultSalt=null;
+    assessment={tasks:[],experiments:[],history:[],gates:{}};
+    for(const el of formFields()){
+      if(el.type==='checkbox')el.checked=false;
+      else el.value=el.name==='currency'?'INR':(el.type==='range'?el.defaultValue:'');
+    }
+    ['taskName','taskOwner','taskDue','taskMeasure','coachInput','expHyp','expChannel','expCap','expMetric','expStop','vaultPass','vaultConfirm','importPass'].forEach(id=>{if($(id))$(id).value='';});
+    $('dashScore').textContent='—';$('dashCoverage').textContent='0%';$('dashVerified').textContent='0%';$('dashRevenue').textContent='—';$('dashActions').textContent='0';
+    $('healthStatus').className='healthbox gray';
+    $('healthStatus').innerHTML='<h3>Business health: Locked</h3><p>Unlock the vault to view your assessment.</p>';
+    $('unitChecksBox').innerHTML='<p class="muted">Unlock the vault to view unit-economics checks.</p>';
+    $('simOutput').innerHTML='<p class="muted">Unlock the vault to run simulations.</p>';
+    $('scoreChart').textContent='Unlock the vault to view component scores.';
+    $('radarChart').textContent='Unlock the vault to view the chart.';
+    $('revenueChart').textContent='Unlock the vault to view revenue comparison.';
+    $('decisionBox').innerHTML='<p class="muted">Unlock the vault to view guidance.</p>';
+    $('coachLog').innerHTML='<div class="coach-message assistant">Unlock the vault to continue using the private Growth Coach.</div>';
+    $('reportBody').innerHTML='<p class="muted">Unlock the vault to view the assessment report.</p>';
+    $('recommendedActions').innerHTML='<p class="muted">Unlock the vault to view recommendations.</p>';
+    $('phaseRoadmap').innerHTML='<p class="muted">Unlock the vault to view the roadmap.</p>';
+    $('taskList').innerHTML='<p class="muted">Unlock the vault to view actions.</p>';
+    $('experimentList').innerHTML='<p class="muted">Unlock the vault to view experiments.</p>';
+    $('historyList').innerHTML='<p class="muted">Unlock the vault to view snapshots.</p>';
+    $('gateChecklist').innerHTML='';
+    $('vaultGate').classList.remove('hidden');
+    gateInit();
+    setStatus('Locked');
+  });
+}
+
+renderDimensions();
+renderGates();
+initLicenseGate();
+
+$('activateBtn').onclick=handleActivate;
+$('copyDeviceBtn').onclick=()=>{navigator.clipboard?.writeText(deviceId);$('copyDeviceBtn').textContent='Copied!';setTimeout(()=>$('copyDeviceBtn').textContent='Copy ID',1500);};
+$('copyDevicePrivacyBtn').onclick=()=>{navigator.clipboard?.writeText(deviceId);$('copyDevicePrivacyBtn').textContent='Copied!';setTimeout(()=>$('copyDevicePrivacyBtn').textContent='Copy Device ID',1500);};
+$('openRenewBtn').onclick=()=>{
+  if(activeLicense)$('cancelRenewBtn').classList.remove('hidden');
+  $('licenseStatus').textContent='';
+  $('licenseGate').classList.remove('hidden');
+};
+$('cancelRenewBtn').onclick=()=>{$('licenseGate').classList.add('hidden');};
+
+$('vaultButton').onclick=unlock;
+$('vaultPass').addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
+$('importConfirmBtn').onclick=confirmImportBackup;
+$('importPass').addEventListener('keydown',e=>{if(e.key==='Enter')confirmImportBackup();});
+$('importCancelBtn').onclick=()=>{pendingImportRecord=null;$('importPass').value='';$('importGate').classList.add('hidden');};
+
+$('lockBtn').onclick=lock;
+$('backupBtn').onclick=exportBackup;
+$('importBtn').onclick=()=>$('backupFile').click();
+$('backupFile').onchange=e=>importBackup(e.target.files?.[0]);
+$('printBtn').onclick=()=>{analyze();go('report');setTimeout(()=>window.print(),120);};
+$('analyzeTop').onclick=()=>{analyze();go('dashboard');scheduleSave();};
+$('analyzeAssessment').onclick=()=>{analyze();scheduleSave();};
+$('snapshotTop').onclick=saveSnapshot;
+$('snapshotBtn2').onclick=saveSnapshot;
+$('addTask').onclick=addTask;
+$('addExperimentBtn').onclick=addExperiment;
+$('exportCsvBtn').onclick=exportTasksCsv;
+$('redactReportToggle').onchange=()=>analyze();
+
+document.querySelectorAll('#taskFilters button').forEach(btn=>btn.onclick=()=>{
+  taskFilter=btn.dataset.filter;
+  document.querySelectorAll('#taskFilters button').forEach(b=>b.classList.toggle('active-filter',b===btn));
+  renderTasks();
+});
+
+$('coachForm').onsubmit=e=>{e.preventDefault();askCoach($('coachInput').value);$('coachInput').value='';};
+document.querySelectorAll('.coach-prompt').forEach(b=>b.onclick=()=>askCoach(b.dataset.question));
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>go(b.dataset.page));
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+document.querySelectorAll('input[name],select[name],textarea[name]').forEach(el=>{
+  el.addEventListener('input',()=>{analyze();scheduleSave();});
+  el.addEventListener('change',()=>{analyze();scheduleSave();});
+});
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveNow();}
+});
+})();
+</script>
+</body>
+</html>
